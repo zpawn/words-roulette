@@ -1,8 +1,8 @@
 {
-  "name": "my-english",
+  "name": "words-roulette",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://zpawn.github.io/my-english",
+  "homepage": "https://github.com/zpawn/words-roulette",
   "dependencies": {
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
