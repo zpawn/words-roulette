@@ -2,7 +2,7 @@
   "name": "words-roulette",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://github.com/zpawn/words-roulette",
+  "homepage": "http://words-roulette.herokuapp.com",
   "dependencies": {
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.1",
