@@ -5,7 +5,7 @@ import amber from "@material-ui/core/colors/amber";
 
 export const styles = theme => ({
   Alert: {
-    margin: "10px"
+    marginBottom: theme.spacing.unit
   },
 
   success: {

@@ -43,7 +43,6 @@ const New = compose(
     {
       form: _cloneDeep(initForm),
       disabled: false,
-      isOpenAlert: false,
       isSuccess: true
     },
     {
@@ -107,9 +106,6 @@ const New = compose(
     onChange,
     onSubmit,
     isSuccess,
-    isOpenAlert,
-    onOpenAlert,
-    onCloseAlert,
     onAddTranslations,
     form: { newWord, newTranslation, newTranslations }
   }) => (
