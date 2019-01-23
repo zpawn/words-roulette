@@ -10,6 +10,11 @@ const logger = createLogger({
   collapsed: true
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk, logger));
+const middleware =
+  process.env.NODE_ENV !== "production"
+    ? applyMiddleware(thunk, logger)
+    : applyMiddleware(thunk);
+
+const store = createStore(rootReducer, middleware);
 
 export { store };
