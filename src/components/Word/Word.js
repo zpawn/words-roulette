@@ -14,10 +14,9 @@ import _cloneDeep from "lodash/cloneDeep";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
 
 import { wordUpdate } from "../../store/words";
-import { Word } from "../New";
+import { Word, Submit } from "../New";
 
 ////
 
@@ -46,11 +45,13 @@ const word = compose(
   withStateHandlers(
     {
       wordId: null,
-      word: ""
+      word: "",
+      disabled: false
     },
     {
       onWordId: () => wordId => ({ wordId }),
-      onWord: () => word => ({ word })
+      onWord: () => word => ({ word }),
+      onDisabledHandler: () => disabled => ({ disabled })
     }
   ),
 
@@ -129,15 +130,7 @@ const word = compose(
           />
         ))}
 
-        <Fab
-          variant="extended"
-          aria-label="Submit"
-          color="primary"
-          onClick={onSave}
-          type="submit"
-        >
-          Save
-        </Fab>
+        <Submit onSubmit={onSave} />
       </>
     );
   }
