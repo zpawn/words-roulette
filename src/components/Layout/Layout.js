@@ -5,7 +5,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Router from "../Router";
 import Navigation, { NewWordButton } from "../Navigation";
 import Alerts from "../UI/Alerts";
-import styles from "./styles";
+import Footer from "../Footer";
+import { styles } from "./index";
 
 ////
 
@@ -17,6 +18,7 @@ const layout = ({ classes }) => (
       <Router />
       <NewWordButton />
     </main>
+    <Footer />
   </div>
 );
 

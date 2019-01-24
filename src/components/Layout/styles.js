@@ -1,4 +1,4 @@
-export default theme => ({
+export const styles = theme => ({
   layout: {
     display: "flex",
     flexDirection: "column",
