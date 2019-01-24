@@ -6,7 +6,7 @@ import { actionTypes } from "./index";
 ////
 
 const INIT_STATE = {
-  items: null
+  items: []
 };
 
 const alertAdd = (state, { alert }) => {
@@ -17,7 +17,9 @@ const alertAdd = (state, { alert }) => {
 
 const alertRemove = (state, { id }) => {
   if (!_isEmpty(state.items)) {
-    return state.items.filter(item => item.id !== id);
+    const newState = _cloneDeep(state);
+    newState.items = state.items.filter(item => item.id !== id);
+    return newState;
   }
 
   return state;
@@ -25,7 +27,7 @@ const alertRemove = (state, { id }) => {
 
 const alertsClear = state => ({
   ...state,
-  items: null
+  items: []
 });
 
 ////

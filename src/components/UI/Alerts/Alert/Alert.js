@@ -33,11 +33,12 @@ const alert = compose(
 
   setPropTypes({
     classes: PropTypes.object,
+    id: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     onRemove: PropTypes.func.isRequired,
     variant: PropTypes.oneOf(["success", "warning", "error", "info", "default"])
   })
-)(({ classes, variant, message, onRemove }) => (
+)(({ id, classes, variant, message, onRemove }) => (
   <SnackbarContent
     className={[classes.Alert, classes[variant]].join(" ")}
     aria-describedby="client-snackbar"
@@ -47,7 +48,7 @@ const alert = compose(
         key="close"
         aria-label="Close"
         color="inherit"
-        onClick={onRemove}
+        onClick={() => onRemove(id)}
       >
         <CloseIcon />
       </IconButton>

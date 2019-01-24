@@ -28,7 +28,7 @@ const alerts = compose(
 
   connect(mapStateToProps)
 )(({ classes, alerts }) => {
-  return !Array.isArray(alerts) || _isEmpty(alerts) ? null : (
+  return _isEmpty(alerts) ? null : (
     <Snackbar
       className={classes.Alert}
       anchorOrigin={{
