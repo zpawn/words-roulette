@@ -34,9 +34,11 @@ const alertShow = (variant, message = null) => dispatch => {
     })
   );
 
-  setTimeout(() => {
-    dispatch(alertRemove(id));
-  }, 3000);
+  if (variant !== "error") {
+    setTimeout(() => {
+      dispatch(alertRemove(id));
+    }, 3000);
+  }
 };
 
 export { alertShow, alertRemove, alertsClear, actionTypes };

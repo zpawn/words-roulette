@@ -2,6 +2,7 @@ import _has from "lodash/has";
 
 import { WordsService } from "./index";
 import { TranslationsService } from "../translations";
+import { alertShow } from "../alerts";
 
 ////
 
@@ -75,23 +76,25 @@ const wordsFetch = () => async dispatch => {
     .catch(() => dispatch(wordsFetchFail()));
 };
 
-const wordUpdate = word => async dispatch => {
+const wordUpdate = word => dispatch => {
   WordsService.update(word)
-    .then(() => dispatch(wordUpdateSuccess(word)))
-    .catch(err => {
-      // ToDo: handle this error (Show alert)
-    });
+    .then(() => {
+      dispatch(wordUpdateSuccess(word));
+      dispatch(alertShow("success", "Word updated success"));
+    })
+    .catch(err =>
+      dispatch(alertShow("error", err.message || "Word updated failure"))
+    );
 };
 
 const wordSave = (newWord, newTranslations) => dispatch => {
   return WordsService.save(newWord, newTranslations)
     .then(({ word }) => {
       dispatch(wordSaveSuccess(word));
-      // ToDo: show success Alert
+      dispatch(alertShow("success", "Word created successfully"));
     })
     .catch(err => {
-      // ToDo: show error Alert
-      throw new Error(err.message || "Word created failure");
+      dispatch(alertShow("error", err.message || "Word created failure"));
     });
 };
 
@@ -101,7 +104,7 @@ const wordRemove = wordId => (dispatch, getState) => {
   } = getState();
 
   if (!_has(items, wordId)) {
-    // ToDo: show error Alert with message: Doesn't isset word
+    dispatch(alertShow("error", "Doesn't is set word"));
     return;
   }
 
@@ -113,11 +116,9 @@ const wordRemove = wordId => (dispatch, getState) => {
   Promise.all([wordPromise, translationsPromise])
     .then(() => {
       dispatch(wordRemoveSuccess(wordId));
-      // ToDo: show success Alert
+      dispatch(alertShow("success", "Word created successfully"));
     })
-    .catch(err => {
-      // ToDo: show error Alert
-    });
+    .catch(err => dispatch("error", err.message || "Word created failure"));
 };
 
 ////
