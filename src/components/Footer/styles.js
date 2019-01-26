@@ -3,5 +3,9 @@ export const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     marginBottom: theme.spacing.unit * 2,
     marginLeft: theme.spacing.unit * 2
+  },
+
+  noSelect: {
+    userSelect: "none"
   }
 });
