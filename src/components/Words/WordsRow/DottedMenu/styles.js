@@ -1,1 +1,6 @@
-export const styles = theme => ({});
+export const styles = theme => ({
+  DialogButtons: {
+    display: "flex",
+    justifyContent: "space-around"
+  }
+});
