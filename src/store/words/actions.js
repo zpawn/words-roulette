@@ -76,9 +76,9 @@ const wordsFetch = () => async dispatch => {
     .catch(() => dispatch(wordsFetchFail()));
 };
 
-const wordUpdate = word => dispatch => {
-  WordsService.update(word)
-    .then(() => {
+const wordUpdate = (updateWord, newTranslations) => dispatch => {
+  return WordsService.update(updateWord, newTranslations)
+    .then(({ word }) => {
       dispatch(wordUpdateSuccess(word));
       dispatch(alertShow("success", "Word updated success"));
     })

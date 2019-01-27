@@ -12,11 +12,14 @@ import {
 import _has from "lodash/has";
 import _cloneDeep from "lodash/cloneDeep";
 
+import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
+import { styles } from "./index";
 import { wordUpdate } from "../../store/words";
-import { Word, Submit } from "../New";
+import { Word, Submit, AddNewTranslation } from "../New";
+import Translation from "./Translation";
 
 ////
 
@@ -25,13 +28,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onUpdate: word => dispatch(wordUpdate(word))
+  onUpdate: (word, newTranslations) =>
+    dispatch(wordUpdate(word, newTranslations))
 });
 
 ////
 
 const word = compose(
   setDisplayName("Word"),
+
+  withStyles(styles),
 
   connect(
     mapStateToProps,
@@ -46,12 +52,16 @@ const word = compose(
     {
       wordId: null,
       word: "",
+      newTranslation: "",
+      newTranslations: [],
       disabled: false
     },
     {
       onWordId: () => wordId => ({ wordId }),
       onWord: () => word => ({ word }),
-      onDisabledHandler: () => disabled => ({ disabled })
+      onDisabledHandler: () => disabled => ({ disabled }),
+      onNewTranslationHandler: () => newTranslation => ({ newTranslation }),
+      onNewTranslationsHandler: () => newTranslations => ({ newTranslations })
     }
   ),
 
@@ -72,7 +82,51 @@ const word = compose(
       }
     },
 
-    onSave: ({ word, onUpdate }) => () => onUpdate(word)
+    onSave: ({
+      word,
+      onUpdate,
+      newTranslation,
+      newTranslations,
+      onNewTranslationHandler
+    }) => () => {
+      word.name = word.name.trim();
+      newTranslation = newTranslation.trim();
+      newTranslations = newTranslations.map(t => t.trim());
+
+      if (newTranslation.length) {
+        newTranslations.push(newTranslation);
+      }
+
+      onUpdate(word, newTranslations).finally(() =>
+        onNewTranslationHandler("")
+      );
+    },
+
+    onNewTranslationsChange: ({
+      newTranslations,
+      onNewTranslationsHandler
+    }) => index => ({ target: { value } }) => {
+      newTranslations[index] = value;
+      onNewTranslationsHandler(newTranslations);
+    },
+
+    onNewTranslationChange: ({ newTranslation, onNewTranslationHandler }) => ({
+      target: { value }
+    }) => {
+      onNewTranslationHandler(value);
+    },
+
+    onNewTranslationsAdd: ({
+      newTranslation,
+      newTranslations,
+      onNewTranslationHandler,
+      onNewTranslationsHandler
+    }) => () => {
+      const updated = _cloneDeep(newTranslations);
+      updated.push(newTranslation);
+      onNewTranslationsHandler(updated);
+      onNewTranslationHandler("");
+    }
   }),
 
   lifecycle({
@@ -102,12 +156,18 @@ const word = compose(
 )(
   ({
     name,
-    wordId,
     word,
     words,
     onSave,
+    wordId,
+    classes,
     onChangeWord,
-    onChangeTranslation
+    newTranslation,
+    newTranslations,
+    onChangeTranslation,
+    onNewTranslationsAdd,
+    onNewTranslationChange,
+    onNewTranslationsChange
   }) => {
     if (!wordId || !_has(words, wordId) || !word) {
       return <CircularProgress color="secondary" />;
@@ -117,18 +177,35 @@ const word = compose(
       <>
         <Word name={name} word={word.name} onChange={onChangeWord} />
 
+        <Typography variant="caption" className={classes.subTitle}>
+          Translations:
+        </Typography>
+
         {Object.keys(word.translations).map(id => (
-          <TextField
+          <Translation
             key={id}
-            autoFocus
-            fullWidth
-            id="Translation"
-            label="Translation"
-            margin="normal"
+            id={id}
             value={word.translations[id].translation}
             onChange={onChangeTranslation(id)}
           />
         ))}
+
+        {!newTranslations.length
+          ? null
+          : newTranslations.map((translation, index) => (
+              <Translation
+                key={index}
+                id={index}
+                value={translation}
+                onChange={onNewTranslationsChange(index)}
+              />
+            ))}
+
+        <AddNewTranslation
+          newTranslation={newTranslation}
+          onChange={onNewTranslationChange}
+          onAddTranslations={onNewTranslationsAdd}
+        />
 
         <Submit onSubmit={onSave} />
       </>

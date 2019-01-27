@@ -60,19 +60,21 @@ class WordsService {
 
   /**
    * @param {Object} word
+   * @param {Array} newTranslations
    * @return {Promise<void>}
    */
-  static async update(word) {
+  static async update(word, newTranslations) {
     if (_isEmpty(word)) {
       throw new Error("Empty word data");
     }
 
     try {
+      const now = Date.now();
       const wordPromise = await Firebase.collection("words")
         .doc(word.id)
         .update({
           name: word.name,
-          updatedAt: Date.now()
+          updatedAt: now
         });
 
       const translationsBatch = Firebase.batch();
@@ -85,9 +87,33 @@ class WordsService {
 
       const translationsPromise = await translationsBatch.commit();
 
-      Promise.all([wordPromise, translationsPromise]).catch(err => {
-        throw new Error(err.message || "Updated word failure");
-      });
+      const newTranslationsPromise = await TranslationsService.saveAll(
+        word.id,
+        newTranslations
+      );
+
+      return Promise.all([
+        wordPromise,
+        translationsPromise,
+        newTranslationsPromise
+      ])
+        .then(([updatedWord, updatedTranslations, updatedNewTranslations]) => {
+          const translations = parseResponseItems(updatedNewTranslations);
+          return Promise.resolve({
+            word: {
+              ...word,
+              name: word.name,
+              updatedAt: now,
+              translations: translations.reduce((result, t) => {
+                result[t.id] = t;
+                return result;
+              }, {})
+            }
+          });
+        })
+        .catch(err => {
+          throw new Error(err.message || "Updated word failure");
+        });
     } catch (e) {
       throw new Error(e.message || "Firestore error");
     }
