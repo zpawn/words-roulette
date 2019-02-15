@@ -45,12 +45,7 @@ const authSignOut = () => dispatch => {
 const authCheck = () => async dispatch => {
   try {
     const user = await AuthService.check();
-    if (user) {
-      dispatch(authSignInSuccess());
-      history.push("/");
-    } else {
-      dispatch(authReset());
-    }
+    user ? dispatch(authSignInSuccess()) : dispatch(authReset());
   } catch (e) {
     dispatch(authReset());
   }
