@@ -123,7 +123,9 @@ const wordRemove = wordId => (dispatch, getState) => {
       dispatch(wordRemoveSuccess(wordId));
       dispatch(alertShow("success", "Word created successfully"));
     })
-    .catch(err => dispatch("error", err.message || "Word created failure"));
+    .catch(err =>
+      dispatch(alertShow("error", err.message || "Word created failure"))
+    );
 };
 
 ////
