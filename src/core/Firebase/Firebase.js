@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
+import "firebase/auth";
 
 ////
 
@@ -12,8 +13,10 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 
-const Firebase = initializeApp(config).firestore();
+const Firebase = initializeApp(config);
+const Firestore = Firebase.firestore();
+const Auth = Firebase.auth();
 
 ////
 
-export { Firebase };
+export { Firebase, Firestore, Auth };

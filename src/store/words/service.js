@@ -1,7 +1,7 @@
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import { Firebase, parseResponseItems } from "../../core/Firebase";
+import { Firestore, parseResponseItems } from "../../core/Firebase";
 import { TranslationsService } from "../translations";
 
 ////
@@ -12,7 +12,7 @@ class WordsService {
    */
   static async findAll() {
     try {
-      return Firebase.collection("words")
+      return Firestore.collection("words")
         .get()
         .then(res => parseResponseItems(res));
     } catch (e) {
@@ -31,7 +31,7 @@ class WordsService {
     }
 
     try {
-      const createdWord = await Firebase.collection("words")
+      const createdWord = await Firestore.collection("words")
         .add({
           name: newWord,
           createdAt: Date.now(),
@@ -70,17 +70,17 @@ class WordsService {
 
     try {
       const now = Date.now();
-      const wordPromise = await Firebase.collection("words")
+      const wordPromise = await Firestore.collection("words")
         .doc(word.id)
         .update({
           name: word.name,
           updatedAt: now
         });
 
-      const translationsBatch = Firebase.batch();
+      const translationsBatch = Firestore.batch();
 
       Object.keys(word.translations).forEach(id => {
-        translationsBatch.update(Firebase.collection("translations").doc(id), {
+        translationsBatch.update(Firestore.collection("translations").doc(id), {
           translation: word.translations[id].translation
         });
       });
@@ -125,7 +125,7 @@ class WordsService {
    */
   static async remove(id) {
     try {
-      return Firebase.collection("words")
+      return Firestore.collection("words")
         .doc(id)
         .delete();
     } catch (e) {

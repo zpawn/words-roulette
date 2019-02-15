@@ -1,6 +1,6 @@
 import _isString from "lodash/isString";
 
-import { Firebase, parseResponseItems } from "../../core/Firebase";
+import { Firestore, parseResponseItems } from "../../core/Firebase";
 
 ////
 
@@ -10,7 +10,7 @@ class TranslationsService {
    */
   static async findAll() {
     try {
-      return Firebase.collection("translations")
+      return Firestore.collection("translations")
         .get()
         .then(res => parseResponseItems(res));
     } catch (e) {
@@ -24,7 +24,7 @@ class TranslationsService {
    * @return {Promise<firebase.firestore.DocumentReference | Error>}
    */
   static async save(wordId, newTranslate) {
-    return Firebase.collection("translations")
+    return Firestore.collection("translations")
       .add({
         wordId: wordId,
         translations: newTranslate,
@@ -40,10 +40,10 @@ class TranslationsService {
    */
   static async saveAll(wordId, newTranslates) {
     try {
-      const batch = Firebase.batch();
+      const batch = Firestore.batch();
 
       newTranslates.forEach(t => {
-        batch.set(Firebase.collection("translations").doc(), {
+        batch.set(Firestore.collection("translations").doc(), {
           wordId: wordId,
           translation: t,
           labelId: ""
@@ -51,7 +51,7 @@ class TranslationsService {
       });
 
       return batch.commit().then(() =>
-        Firebase.collection("translations")
+        Firestore.collection("translations")
           .where("wordId", "==", wordId)
           .get()
       );
@@ -72,10 +72,10 @@ class TranslationsService {
     }
 
     try {
-      const batch = Firebase.batch();
+      const batch = Firestore.batch();
 
       ids.forEach(id => {
-        batch.delete(Firebase.collection("translations").doc(id));
+        batch.delete(Firestore.collection("translations").doc(id));
       });
 
       return batch.commit();

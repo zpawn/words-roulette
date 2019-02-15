@@ -2,7 +2,8 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 
 import Dashboard from "./Dashboard";
-import Auth from "./Auth";
+import SignIn from "./Auth/SignIn";
+import SignOut from "./Auth/SignOut";
 import New from "./New";
 import Words from "./Words";
 import Word from "./Word";
@@ -14,7 +15,8 @@ import Roulette from "./Roulette";
 
 const router = () => (
   <Switch>
-    <Route path="/auth" component={Auth} />
+    <Route path="/signin" component={SignIn} />
+    <Route path="/signout" component={SignOut} />
     <Route path="/new" component={New} />
     <Route path="/words/:id" component={Word} />
     <Route path="/words" component={Words} />

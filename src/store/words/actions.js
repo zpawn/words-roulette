@@ -48,32 +48,37 @@ const wordRemoveSuccess = wordId => ({
 const wordsFetch = () => async dispatch => {
   dispatch(wordsFetchStart());
 
-  const wordsPromise = await WordsService.findAll();
-  const translationsPromise = await TranslationsService.findAll();
+  try {
+    const wordsPromise = await WordsService.findAll();
+    const translationsPromise = await TranslationsService.findAll();
 
-  Promise.all([wordsPromise, translationsPromise])
-    .then(([words, translations]) => {
-      const data = {};
-      if (!words.length && !translations.length) {
-        return;
-      }
-
-      words.forEach(word => (data[word.id] = word));
-      translations.forEach(({ wordId, ...t }) => {
-        if (!_has(data, wordId)) {
+    Promise.all([wordsPromise, translationsPromise]).then(
+      ([words, translations]) => {
+        const data = {};
+        if (!words.length && !translations.length) {
           return;
         }
 
-        if (!_has(data, `${wordId}.translations`)) {
-          data[wordId].translations = {};
-        }
+        words.forEach(word => (data[word.id] = word));
+        translations.forEach(({ wordId, ...t }) => {
+          if (!_has(data, wordId)) {
+            return;
+          }
 
-        data[wordId].translations[t.id] = t;
-      });
+          if (!_has(data, `${wordId}.translations`)) {
+            data[wordId].translations = {};
+          }
 
-      dispatch(wordsFetchSuccess(data));
-    })
-    .catch(() => dispatch(wordsFetchFail()));
+          data[wordId].translations[t.id] = t;
+        });
+
+        dispatch(wordsFetchSuccess(data));
+      }
+    );
+  } catch (err) {
+    dispatch(alertShow("error", err.message || "Fetched words failure"));
+    dispatch(wordsFetchFail());
+  }
 };
 
 const wordUpdate = (updateWord, newTranslations) => dispatch => {
