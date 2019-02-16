@@ -9,6 +9,7 @@ import {
   withStateHandlers,
   withPropsOnChange
 } from "recompose";
+import nanoid from "nanoid";
 import _has from "lodash/has";
 import _cloneDeep from "lodash/cloneDeep";
 
@@ -18,8 +19,12 @@ import Typography from "@material-ui/core/Typography";
 
 import { styles } from "./index";
 import { wordUpdate } from "../../store/words";
+import {
+  generateField,
+  prepareNewTranslations as prepare
+} from "../../store/translations";
 import { Word, Submit, AddNewTranslation } from "../New";
-import Translation from "./Translation";
+import Translations from "./Translations";
 
 ////
 
@@ -53,7 +58,7 @@ const word = compose(
       wordId: null,
       word: "",
       newTranslation: "",
-      newTranslations: [],
+      newTranslations: {},
       disabled: false
     },
     {
@@ -91,22 +96,16 @@ const word = compose(
     }) => () => {
       word.name = word.name.trim();
       newTranslation = newTranslation.trim();
-      newTranslations = newTranslations.map(t => t.trim());
+      const prepared = prepare(newTranslations, newTranslation);
 
-      if (newTranslation.length) {
-        newTranslations.push(newTranslation);
-      }
-
-      onUpdate(word, newTranslations).finally(() =>
-        onNewTranslationHandler("")
-      );
+      onUpdate(word, prepared).finally(() => onNewTranslationHandler(""));
     },
 
     onNewTranslationsChange: ({
       newTranslations,
       onNewTranslationsHandler
     }) => index => ({ target: { value } }) => {
-      newTranslations[index] = value;
+      newTranslations[index].translation = value;
       onNewTranslationsHandler(newTranslations);
     },
 
@@ -123,7 +122,7 @@ const word = compose(
       onNewTranslationsHandler
     }) => () => {
       const updated = _cloneDeep(newTranslations);
-      updated.push(newTranslation);
+      updated[nanoid()] = generateField(newTranslation);
       onNewTranslationsHandler(updated);
       onNewTranslationHandler("");
     }
@@ -181,25 +180,15 @@ const word = compose(
           Translations:
         </Typography>
 
-        {Object.keys(word.translations).map(id => (
-          <Translation
-            key={id}
-            id={id}
-            value={word.translations[id].translation}
-            onChange={onChangeTranslation(id)}
-          />
-        ))}
+        <Translations
+          translations={word.translations}
+          onChange={onChangeTranslation}
+        />
 
-        {!newTranslations.length
-          ? null
-          : newTranslations.map((translation, index) => (
-              <Translation
-                key={index}
-                id={index}
-                value={translation}
-                onChange={onNewTranslationsChange(index)}
-              />
-            ))}
+        <Translations
+          translations={newTranslations}
+          onChange={onNewTranslationsChange}
+        />
 
         <AddNewTranslation
           newTranslation={newTranslation}
@@ -207,7 +196,7 @@ const word = compose(
           onAddTranslations={onNewTranslationsAdd}
         />
 
-        <Submit onSubmit={onSave} />
+        <Submit onSubmit={onSave} title="Save" />
       </>
     );
   }
