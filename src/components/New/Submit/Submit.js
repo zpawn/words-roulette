@@ -9,7 +9,7 @@ import { styles } from "./index";
 
 ////
 
-const submit = ({ classes, onSubmit, disabled }) => (
+const submit = ({ classes, onSubmit, disabled, title }) => (
   <Grid
     container
     spacing={8}
@@ -26,19 +26,21 @@ const submit = ({ classes, onSubmit, disabled }) => (
       type="submit"
       disabled={disabled}
     >
-      Submit
+      {title}
     </Fab>
   </Grid>
 );
 
 submit.defaultProps = {
-  disabled: false
+  disabled: false,
+  title: "Submit"
 };
 
 submit.propTypes = {
   classes: PropTypes.object,
   onSubmit: PropTypes.func,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  title: PropTypes.string
 };
 
 export default withStyles(styles)(submit);
