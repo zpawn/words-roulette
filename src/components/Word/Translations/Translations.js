@@ -7,7 +7,7 @@ import Translation from "./Translation";
 
 ////
 
-const translations = ({ classes, translations, onChange }) =>
+const translations = ({ translations, onChange }) =>
   Object.keys(translations).map(id => (
     <Translation
       key={id}
@@ -18,7 +18,6 @@ const translations = ({ classes, translations, onChange }) =>
   ));
 
 translations.propTypes = {
-  classes: PropTypes.object.isRequired,
   translations: PropTypes.object,
   onChange: PropTypes.func.isRequired
 };
