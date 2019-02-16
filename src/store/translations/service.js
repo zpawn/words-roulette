@@ -28,7 +28,7 @@ class TranslationsService {
       .add({
         wordId: wordId,
         translations: newTranslate,
-        labelId: ""
+        labels: ""
       })
       .catch(() => new Error("Could not create translation"));
   }
@@ -46,7 +46,7 @@ class TranslationsService {
         batch.set(Firestore.collection("translations").doc(), {
           wordId: wordId,
           translation: t,
-          labelId: ""
+          labels: ""
         });
       });
 
