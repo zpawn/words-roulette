@@ -1,25 +1,35 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+
+import DottedMenu from "./DottedMenu";
 
 ////
 
-const translation = ({ id, value, onChange }) => (
-  <TextField
-    autoFocus
-    fullWidth
-    id={`Translation-${id}`}
-    margin="normal"
-    value={value}
-    onChange={onChange}
-  />
+const translation = ({ id, translation, labels, onChange }) => (
+  <TableRow>
+    <TableCell>
+      <Typography variant="subtitle1">{translation}</Typography>
+    </TableCell>
+    <TableCell align="right">
+      <DottedMenu
+        id={id}
+        translation={translation}
+        labels={labels}
+        onChange={onChange}
+      />
+    </TableCell>
+  </TableRow>
 );
 
 translation.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string
+  translation: PropTypes.string,
+  labels: PropTypes.array
 };
 
 export default translation;

@@ -77,12 +77,10 @@ const word = compose(
         name: value
       }),
 
-    onChangeTranslation: ({ word, onWord }) => id => ({
-      target: { value }
-    }) => {
+    onChangeTranslation: ({ word, onWord }) => id => translation => {
       if (_has(word, `translations.${id}`)) {
         const updated = _cloneDeep(word);
-        updated.translations[id].translation = value;
+        updated.translations[id].translation = translation;
         onWord(updated);
       }
     },
