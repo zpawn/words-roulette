@@ -10,6 +10,7 @@ import Word from "./Word";
 import RouletteSettings from "./RouletteSettings";
 import RouletteResult from "./RouletteResult";
 import Roulette from "./Roulette";
+import Labels from "./Labels";
 
 ////
 
@@ -20,6 +21,7 @@ const router = () => (
     <Route path="/new" component={New} />
     <Route path="/words/:id" component={Word} />
     <Route path="/words" component={Words} />
+    <Route path="/labels" component={Labels} />
     <Route path="/roulette/settings" component={RouletteSettings} />
     <Route path="/roulette/result" component={RouletteResult} />
     <Route path="/roulette" component={Roulette} />

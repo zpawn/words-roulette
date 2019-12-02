@@ -9,6 +9,7 @@ import ExitIcon from "@material-ui/icons/ExitToApp";
 import SignInIcon from "@material-ui/icons/PlayForWork";
 import ListIcon from "@material-ui/icons/FormatListBulleted";
 import GamepadIcon from "@material-ui/icons/Gamepad";
+import LoyaltyIcon from "@material-ui/icons/Loyalty";
 
 import NavigationItem from "./NavigationItem";
 
@@ -25,6 +26,7 @@ const navigationItems = ({ isSignIn }) => (
     <NavigationItem text="Dashboard" icon={<DashboardIcon />} />
     <NavigationItem route="/new" text="New" icon={<AddIcon />} />
     <NavigationItem route="/words" text="All Words" icon={<ListIcon />} />
+    <NavigationItem route="/labels" text="Labels" icon={<LoyaltyIcon />} />
     <NavigationItem
       route="/roulette/settings"
       text="Roulette"
