@@ -39,12 +39,6 @@
     "lint:fix": "eslint --debug src/ --fix",
     "prettier": "prettier --write 'src/**/*.js'"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
