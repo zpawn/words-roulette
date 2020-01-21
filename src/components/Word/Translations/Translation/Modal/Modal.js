@@ -27,7 +27,7 @@ const modal = compose(
   }),
 
   setPropTypes({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.number,
     translation: PropTypes.string,
     labels: PropTypes.array,
     onChange: PropTypes.func,

@@ -1,7 +1,6 @@
-import _has from "lodash/has";
+import has from "lodash/has";
 
 import { WordsService } from "./index";
-import { TranslationsService } from "../translations";
 import { alertShow } from "../alerts";
 
 ////
@@ -15,32 +14,29 @@ const actionTypes = {
   WORD_REMOVE_SUCCESS: "WORD_REMOVE_SUCCESS"
 };
 
-const wordsFetchStart = () => ({
-  type: actionTypes.WORDS_FETCH_START
-});
+const wordsFetchStart = () => ({ type: actionTypes.WORDS_FETCH_START });
 
 const wordsFetchSuccess = words => ({
   type: actionTypes.WORDS_FETCH_SUCCESS,
-  words
+  words,
 });
 
-const wordsFetchFail = () => ({
-  type: actionTypes.WORDS_FETCH_FAIL
-});
+const wordsFetchFail = () => ({ type: actionTypes.WORDS_FETCH_FAIL });
 
-const wordUpdateSuccess = word => ({
+const wordUpdateSuccess = (id, word) => ({
   type: actionTypes.WORD_UPDATE_SUCCESS,
-  word
+  id,
+  word,
 });
 
 const wordSaveSuccess = word => ({
   type: actionTypes.WORD_SAVE_SUCCESS,
-  word
+  word,
 });
 
 const wordRemoveSuccess = wordId => ({
   type: actionTypes.WORD_REMOVE_SUCCESS,
-  wordId
+  wordId,
 });
 
 ////
@@ -48,84 +44,46 @@ const wordRemoveSuccess = wordId => ({
 const wordsFetch = () => async dispatch => {
   dispatch(wordsFetchStart());
 
-  try {
-    const wordsPromise = await WordsService.findAll();
-    const translationsPromise = await TranslationsService.findAll();
-
-    Promise.all([wordsPromise, translationsPromise]).then(
-      ([words, translations]) => {
-        const data = {};
-        if (!words.length && !translations.length) {
-          return;
-        }
-
-        words.forEach(word => (data[word.id] = word));
-        translations.forEach(({ wordId, ...t }) => {
-          if (!_has(data, wordId)) {
-            return;
-          }
-
-          if (!_has(data, `${wordId}.translations`)) {
-            data[wordId].translations = {};
-          }
-
-          data[wordId].translations[t.id] = t;
-        });
-
-        dispatch(wordsFetchSuccess(data));
-      }
-    );
-  } catch (err) {
-    dispatch(alertShow("error", err.message || "Fetched words failure"));
-    dispatch(wordsFetchFail());
-  }
-};
-
-const wordUpdate = (updateWord, newTranslations) => dispatch => {
-  return WordsService.update(updateWord, newTranslations)
-    .then(({ word }) => {
-      dispatch(wordUpdateSuccess(word));
-      dispatch(alertShow("success", "Word updated success"));
+  WordsService
+    .findAll()
+    .then((words) => {
+      dispatch(wordsFetchSuccess(words))
     })
-    .catch(err =>
-      dispatch(alertShow("error", err.message || "Word updated failure"))
-    );
-};
-
-const wordSave = (newWord, newTranslations) => dispatch => {
-  return WordsService.save(newWord, newTranslations)
-    .then(({ word }) => {
-      dispatch(wordSaveSuccess(word));
-      dispatch(alertShow("success", "Word created successfully"));
-    })
-    .catch(err => {
-      dispatch(alertShow("error", err.message || "Word created failure"));
+    .catch((err) => {
+      dispatch(alertShow("error", err.message || "Fetched words failure"));
+      dispatch(wordsFetchFail());
     });
 };
+
+const wordUpdate = (id, updateWord) => dispatch => {
+  WordsService.update(id, updateWord)
+    .then(() => {
+      dispatch(wordUpdateSuccess(id, updateWord));
+      dispatch(alertShow("success", "Word update success"));
+    })
+    .catch((err) => dispatch(alertShow("error", err)))
+};
+
+const wordSave = (word) => dispatch => dispatch(wordUpdate(word.name, word));
 
 const wordRemove = wordId => (dispatch, getState) => {
   const {
     words: { items }
   } = getState();
 
-  if (!_has(items, wordId)) {
+  if (!has(items, wordId)) {
     dispatch(alertShow("error", "Doesn't is set word"));
     return;
   }
 
-  const translationIds = Object.keys(items[wordId].translations);
-
-  const wordPromise = WordsService.remove(wordId);
-  const translationsPromise = TranslationsService.remove(translationIds);
-
-  Promise.all([wordPromise, translationsPromise])
+  WordsService.remove(wordId)
     .then(() => {
       dispatch(wordRemoveSuccess(wordId));
       dispatch(alertShow("success", "Word created successfully"));
     })
     .catch(err =>
-      dispatch(alertShow("error", err.message || "Word created failure"))
-    );
+      dispatch(alertShow("error", err.message || "Word remove failure"))
+    )
 };
 
 ////

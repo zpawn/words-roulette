@@ -21,10 +21,10 @@ const dottedMenu = compose(
   setDisplayName("TranslationDottedMenu"),
 
   setPropTypes({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    id: PropTypes.number.isRequired,
+    onChange: PropTypes.func,
+    onRemove: PropTypes.func,
     translation: PropTypes.string,
-    labels: PropTypes.array,
-    onChange: PropTypes.func
   }),
 
   withStateHandlers(
@@ -50,6 +50,12 @@ const dottedMenu = compose(
     onDialogClose: ({ isDialogOpenHandler, onMenuClose }) => () => {
       isDialogOpenHandler(false);
       onMenuClose();
+    },
+
+    onDialogRemove: ({ isDialogOpenHandler, onMenuClose, onRemove }) => () => {
+      onRemove();
+      isDialogOpenHandler(false);
+      onMenuClose();
     }
   })
 )(
@@ -60,6 +66,7 @@ const dottedMenu = compose(
     isDialogOpen,
     onDialogOpen,
     onDialogClose,
+    onDialogRemove,
     id,
     translation,
     labels,
@@ -81,14 +88,13 @@ const dottedMenu = compose(
         onClose={onMenuClose}
       >
         <MenuItem onClick={onDialogOpen}>Edit</MenuItem>
-        <MenuItem onClick={onMenuClose}>Remove</MenuItem>
+        <MenuItem onClick={onDialogRemove}>Remove</MenuItem>
       </Menu>
 
       <Modal
         isOpen={isDialogOpen}
         onClose={onDialogClose}
         translation={translation}
-        labels={labels}
         onChange={onChange}
         id={id}
       />

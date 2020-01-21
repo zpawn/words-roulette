@@ -1,121 +1,34 @@
-import _isArray from "lodash/isArray";
-import _isEmpty from "lodash/isEmpty";
-
-import { Firestore, parseResponseItems } from "../../core/Firebase";
-import { TranslationsService } from "../translations";
+import isEmpty from "lodash/isEmpty";
+import { DB } from "../../core/Firebase";
 
 ////
 
 class WordsService {
   /**
-   * @return {Promise<Array | never>}
+   * @returns {Promise<*>}
    */
   static async findAll() {
     try {
-      return Firestore.collection("words")
-        .get()
-        .then(res => parseResponseItems(res));
+      return DB.ref("/words").once('value').then(snapshot => snapshot.val());
     } catch (e) {
       throw new Error("Fetched words fail");
     }
   }
 
   /**
-   * @param {String} newWord
-   * @param {Array} newTranslations
-   * @return {Promise<{Object}>}
-   */
-  static async save(newWord, newTranslations) {
-    if (!_isArray(newTranslations)) {
-      return Promise.reject("Empty translations");
-    }
-
-    try {
-      const createdWord = await Firestore.collection("words")
-        .add({
-          name: newWord,
-          createdAt: Date.now(),
-          updatedAt: Date.now()
-        })
-        .catch(err => {
-          throw new Error(err.message || "Could not create word");
-        });
-
-      const createdTranslations = await TranslationsService.saveAll(
-        createdWord.id,
-        newTranslations
-      );
-
-      return Promise.resolve({
-        word: {
-          id: createdWord.id,
-          name: newWord,
-          translations: parseResponseItems(createdTranslations)
-        }
-      });
-    } catch (e) {
-      throw new Error("Could not create translation/word");
-    }
-  }
-
-  /**
+   * @param {String} id
    * @param {Object} word
-   * @param {Array} newTranslations
-   * @return {Promise<void>}
+   * @returns {Promise<void>}
    */
-  static async update(word, newTranslations) {
-    if (_isEmpty(word)) {
+  static async update(id, word) {
+    if (!id || isEmpty(word)) {
       throw new Error("Empty word data");
     }
 
     try {
-      const now = Date.now();
-      const wordPromise = await Firestore.collection("words")
-        .doc(word.id)
-        .update({
-          name: word.name,
-          updatedAt: now
-        });
-
-      const translationsBatch = Firestore.batch();
-
-      Object.keys(word.translations).forEach(id => {
-        translationsBatch.update(Firestore.collection("translations").doc(id), {
-          translation: word.translations[id].translation
-        });
-      });
-
-      const translationsPromise = await translationsBatch.commit();
-
-      const newTranslationsPromise = await TranslationsService.saveAll(
-        word.id,
-        newTranslations
-      );
-
-      return Promise.all([
-        wordPromise,
-        translationsPromise,
-        newTranslationsPromise
-      ])
-        .then(([updatedWord, updatedTranslations, updatedNewTranslations]) => {
-          const translations = parseResponseItems(updatedNewTranslations);
-          return Promise.resolve({
-            word: {
-              ...word,
-              name: word.name,
-              updatedAt: now,
-              translations: translations.reduce((result, t) => {
-                result[t.id] = t;
-                return result;
-              }, {})
-            }
-          });
-        })
-        .catch(err => {
-          throw new Error(err.message || "Updated word failure");
-        });
+      return DB.ref('words/' + id).set(word);
     } catch (e) {
-      throw new Error(e.message || "Firestore error");
+      throw new Error(e.message || "There are Word update failure");
     }
   }
 
@@ -125,9 +38,7 @@ class WordsService {
    */
   static async remove(id) {
     try {
-      return Firestore.collection("words")
-        .doc(id)
-        .delete();
+      return DB.ref('words/' + id).remove();
     } catch (e) {
       throw new Error(e.message || "There are Word remove failure");
     }

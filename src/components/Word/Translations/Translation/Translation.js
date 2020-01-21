@@ -9,7 +9,7 @@ import DottedMenu from "./DottedMenu";
 
 ////
 
-const translation = ({ id, translation, labels, onChange }) => (
+const translation = ({ id, translation, onChange, onRemove }) => (
   <TableRow>
     <TableCell>
       <Typography variant="subtitle1">{translation}</Typography>
@@ -18,18 +18,18 @@ const translation = ({ id, translation, labels, onChange }) => (
       <DottedMenu
         id={id}
         translation={translation}
-        labels={labels}
         onChange={onChange}
+        onRemove={onRemove}
       />
     </TableCell>
   </TableRow>
 );
 
 translation.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  onChange: PropTypes.func.isRequired,
   translation: PropTypes.string,
-  labels: PropTypes.array
+  id: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 export default translation;

@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "recompose";
-import _has from "lodash/has";
 import _isEmpty from "lodash/isEmpty";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -36,19 +35,11 @@ const wordsRow = ({ words, onWordRemove }) => (
       </TableRow>
     ) : (
       Object.keys(words).map(wordId => {
-        let t = [];
-        if (_has(words[wordId], "translations")) {
-          t = Object.keys(words[wordId].translations).map(
-            tId => words[wordId].translations[tId].translation
-          );
-        }
-
+        const w = words[wordId];
         return (
           <TableRow key={wordId}>
-            <TableCell>{words[wordId].name}</TableCell>
-
-            <TableCell>{t.join(", ")}</TableCell>
-
+            <TableCell>{w.name}</TableCell>
+            <TableCell>{(w.translations || []).join(", ")}</TableCell>
             <TableCell>
               <DottedMenu wordId={wordId} onWordRemove={onWordRemove} />
             </TableCell>

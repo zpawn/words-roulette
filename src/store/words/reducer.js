@@ -31,9 +31,9 @@ const wordsFetchFail = state => ({
   success: false
 });
 
-const wordUpdateSuccess = (state, { word }) => {
+const wordUpdateSuccess = (state, { id, word }) => {
   const updated = _cloneDeep(state);
-  updated.items[word.id] = word;
+  updated.items[id] = word;
   return updated;
 };
 

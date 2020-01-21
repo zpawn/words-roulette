@@ -9,15 +9,16 @@ import Translation from "./Translation";
 
 ////
 
-const translations = ({ translations, onChange }) => (
+const translations = ({ translations, onChange, onRemove }) => (
   <Table padding="none">
     <TableBody>
-      {Object.keys(translations).map(id => (
+      {translations.map((t, id) => (
         <Translation
           key={id}
           id={id}
-          {...translations[id]}
+          translation={t}
           onChange={onChange(id)}
+          onRemove={onRemove(id)}
         />
       ))}
     </TableBody>
@@ -25,8 +26,9 @@ const translations = ({ translations, onChange }) => (
 );
 
 translations.propTypes = {
-  translations: PropTypes.object,
-  onChange: PropTypes.func.isRequired
+  translations: PropTypes.array,
+  onChange: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(translations);

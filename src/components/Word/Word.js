@@ -1,203 +1,126 @@
-import React from "react";
-import { connect } from "react-redux";
-import {
-  compose,
-  lifecycle,
-  withProps,
-  withHandlers,
-  setDisplayName,
-  withStateHandlers,
-  withPropsOnChange
-} from "recompose";
-import nanoid from "nanoid";
-import _has from "lodash/has";
-import _cloneDeep from "lodash/cloneDeep";
-
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import isEmpty from 'lodash/isEmpty';
+import isArray from "lodash/isArray";
+import cloneDeep from 'lodash/cloneDeep';
+import has from 'lodash/has'
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
-import { styles } from "./index";
-import { wordUpdate } from "../../store/words";
-import {
-  generateField,
-  prepareNewTranslations as prepare
-} from "../../store/translations";
-import { Word, Submit, AddNewTranslation } from "../New";
-import Translations from "./Translations";
-
-////
+import { styles } from './index';
+import { wordUpdate, wordRemove } from "../../store/words";
+import { Word as NewWord, Submit, AddNewTranslation } from "../New";
+import Translations from './Translations';
 
 const mapStateToProps = state => ({
   words: state.words.items
 });
 
 const mapDispatchToProps = dispatch => ({
-  onUpdate: (word, newTranslations) =>
-    dispatch(wordUpdate(word, newTranslations))
+  onUpdate: (id, word) => dispatch(wordUpdate(id, word)),
+  onRemove: (id) => dispatch(wordRemove(id)),
 });
 
-////
+class Word extends Component {
+  state = {
+    id: '',
+    word: null,
+    newTranslation: '',
+  };
 
-const word = compose(
-  setDisplayName("Word"),
+  onSave = () => {
+    const { onUpdate } = this.props;
+    const { id, word } = this.state;
 
-  withStyles(styles),
+    onUpdate(id, word);
+  }
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  onNewTranslationChange = ({ target: { value }}) => {
+    this.setState({ newTranslation: value });
+  }
 
-  withProps({
-    name: "word"
-  }),
+  onNewTranslationsAdd = () => {
+    const { word, newTranslation } = this.state;
+    const newWord = cloneDeep(word);
+    newWord.translations = !isArray(newWord.translations)
+      ? []
+      : newWord.translations;
+    newWord.translations.push(newTranslation.trim());
 
-  withStateHandlers(
-    {
-      wordId: null,
-      word: "",
-      newTranslation: "",
-      newTranslations: {},
-      disabled: false
-    },
-    {
-      onWordId: () => wordId => ({ wordId }),
-      onWord: () => word => ({ word }),
-      onDisabledHandler: () => disabled => ({ disabled }),
-      onNewTranslationHandler: () => newTranslation => ({ newTranslation }),
-      onNewTranslationsHandler: () => newTranslations => ({ newTranslations })
+    this.setState({
+      word: newWord,
+      newTranslation: '',
+    });
+  }
+
+  onRemoveTranslation = (id) => () => {
+    const { word } = this.state;
+    const newWord = cloneDeep(word);
+    newWord.translations = newWord.translations.filter((t, index) => index !==id);
+    this.setState({ word: newWord })
+  }
+
+  onChangeTranslation = (id) => (translation) => {
+    const { word } = this.state;
+    if (has(word, `translations.${id}`)) {
+      const newWord = cloneDeep(word);
+      newWord.translations[id] = translation;
+      this.setState({ word: newWord });
     }
-  ),
+  }
 
-  withHandlers({
-    onChangeWord: ({ word, onWord }) => ({ target: { value } }) =>
-      onWord({
-        ...word,
-        name: value
-      }),
-
-    onChangeTranslation: ({ word, onWord }) => id => translation => {
-      if (_has(word, `translations.${id}`)) {
-        const updated = _cloneDeep(word);
-        updated.translations[id].translation = translation;
-        onWord(updated);
-      }
-    },
-
-    onSave: ({
-      word,
-      onUpdate,
-      newTranslation,
-      newTranslations,
-      onNewTranslationHandler
-    }) => () => {
-      word.name = word.name.trim();
-      newTranslation = newTranslation.trim();
-      const prepared = prepare(newTranslations, newTranslation);
-
-      onUpdate(word, prepared).finally(() => onNewTranslationHandler(""));
-    },
-
-    onNewTranslationsChange: ({
-      newTranslations,
-      onNewTranslationsHandler
-    }) => index => ({ target: { value } }) => {
-      newTranslations[index].translation = value;
-      onNewTranslationsHandler(newTranslations);
-    },
-
-    onNewTranslationChange: ({ newTranslation, onNewTranslationHandler }) => ({
-      target: { value }
-    }) => {
-      onNewTranslationHandler(value);
-    },
-
-    onNewTranslationsAdd: ({
-      newTranslation,
-      newTranslations,
-      onNewTranslationHandler,
-      onNewTranslationsHandler
-    }) => () => {
-      const updated = _cloneDeep(newTranslations);
-      updated[nanoid()] = generateField(newTranslation);
-      onNewTranslationsHandler(updated);
-      onNewTranslationHandler("");
+  componentDidUpdate(prevProps, prevState) {
+    const { words } = this.props;
+    const { id } = this.state;
+    if (prevProps.words !== words && id && words[id]) {
+      this.setState({ word: words[id] })
     }
-  }),
+  }
 
-  lifecycle({
-    componentDidMount() {
-      const {
-        words,
-        onWord,
-        onWordId,
-        match: {
-          params: { id }
-        }
-      } = this.props;
+  componentDidMount() {
+    const { words, match: { params: { id } } } = this.props;
 
-      id && onWordId(id);
+    if (id) { this.setState({ id }); }
+    if (!isEmpty(words[id])) { this.setState({ word: words[id] }); }
+  }
 
-      if (_has(words, id)) {
-        onWord(words[id]);
-      }
-    }
-  }),
 
-  withPropsOnChange(["words"], ({ wordId, words, onWord }) => {
-    if (_has(words, wordId)) {
-      onWord(words[wordId]);
-    }
-  })
-)(
-  ({
-    name,
-    word,
-    words,
-    onSave,
-    wordId,
-    classes,
-    onChangeWord,
-    newTranslation,
-    newTranslations,
-    onChangeTranslation,
-    onNewTranslationsAdd,
-    onNewTranslationChange,
-    onNewTranslationsChange
-  }) => {
-    if (!wordId || !_has(words, wordId) || !word) {
+  render() {
+    const { word, newTranslation } = this.state;
+    const { classes } = this.props;
+
+    if (isEmpty(word)) {
       return <CircularProgress color="secondary" />;
     }
 
     return (
       <>
-        <Word name={name} word={word.name} onChange={onChangeWord} />
-
+        <NewWord word={word.name} disabled />
         <Typography variant="caption" className={classes.subTitle}>
           Translations:
         </Typography>
 
         <Translations
-          translations={word.translations}
-          onChange={onChangeTranslation}
-        />
-
-        <Translations
-          translations={newTranslations}
-          onChange={onNewTranslationsChange}
+          translations={word.translations || []}
+          onChange={this.onChangeTranslation}
+          onRemove={this.onRemoveTranslation}
         />
 
         <AddNewTranslation
           newTranslation={newTranslation}
-          onChange={onNewTranslationChange}
-          onAddTranslations={onNewTranslationsAdd}
+          onChange={this.onNewTranslationChange}
+          onAddTranslations={this.onNewTranslationsAdd}
         />
 
-        <Submit onSubmit={onSave} title="Save" />
+        <Submit onSubmit={this.onSave} title="Save" />
       </>
-    );
+    )
   }
-);
+}
 
-export default word;
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps)
+)(Word);
