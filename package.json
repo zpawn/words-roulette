@@ -24,6 +24,11 @@
     "typeface-roboto": "0.0.54"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^5.3.9",
+    "@storybook/addon-links": "^5.3.9",
+    "@storybook/addons": "^5.3.9",
+    "@storybook/preset-create-react-app": "^1.5.2",
+    "@storybook/react": "^5.3.9",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-prettier": "^3.0.1",
@@ -42,7 +47,9 @@
     "prettier": "prettier --write 'src/**/*.js'",
     "stat:build": "react-scripts build --stats",
     "stat:run": "npx webpack-bundle-analyzer ./build/bundle-stats.json",
-    "stat": "yarn stat:build && yarn stat:run"
+    "stat": "yarn stat:build && yarn stat:run",
+    "book": "start-storybook -p 9009 -s public",
+    "book:build": "build-storybook -s public"
   },
   "husky": {
     "hooks": {
