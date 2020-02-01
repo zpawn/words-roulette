@@ -29,10 +29,10 @@ const wordUpdateSuccess = (id, word) => ({
   word,
 });
 
-const wordSaveSuccess = word => ({
-  type: actionTypes.WORD_SAVE_SUCCESS,
-  word,
-});
+// const wordSaveSuccess = word => ({
+//   type: actionTypes.WORD_SAVE_SUCCESS,
+//   word,
+// });
 
 const wordRemoveSuccess = wordId => ({
   type: actionTypes.WORD_REMOVE_SUCCESS,
