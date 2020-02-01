@@ -38,21 +38,25 @@ class DottedMenu extends Component {
           <MoreVertIcon />
         </IconButton>
 
-        <Menu
-          id="dottedMenu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.onClose}
-        >
-          {
-            items.map(({ title, fn }, index) => (
-              <MenuItem
-                key={index}
-                onClick={this.onHandlerItem(fn)}
-              >{title}</MenuItem>
-            ))
-          }
-        </Menu>
+        {!items.length
+          ? null
+          : (
+            <Menu
+              id="dottedMenu"
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={this.onClose}
+            >
+              {
+                items.map(({ title, fn }, index) => (
+                  <MenuItem key={index} onClick={this.onHandlerItem(fn)}>
+                    {title}
+                  </MenuItem>
+                ))
+              }
+            </Menu>
+          )
+        }
       </>
     );
   }

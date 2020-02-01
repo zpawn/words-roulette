@@ -19,7 +19,9 @@ class SubmitModal extends Component {
 
   onClose = () => this.setState({ isOpen: false });
 
-  onAction = (fn) => () => {
+  onAction = () => {
+    const { fn } = this.props;
+
     fn && fn();
     this.onClose()
   };
@@ -45,7 +47,7 @@ class SubmitModal extends Component {
           <Button onClick={this.onClose} color="primary">
             No
           </Button>
-          <Button onClick={this.onAction(fn)} color="primary" autoFocus>
+          <Button onClick={this.onAction} color="primary" autoFocus>
             Yes
           </Button>
         </DialogActions>
