@@ -34,7 +34,7 @@ class SubmitModal extends Component {
 
   render() {
     const { isOpen } = this.state;
-    const { classes, fn } = this.props;
+    const { classes } = this.props;
 
     return (
       <Dialog

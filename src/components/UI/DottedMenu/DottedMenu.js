@@ -48,11 +48,17 @@ class DottedMenu extends Component {
               onClose={this.onClose}
             >
               {
-                items.map(({ title, fn }, index) => (
-                  <MenuItem key={index} onClick={this.onHandlerItem(fn)}>
-                    {title}
-                  </MenuItem>
-                ))
+                items.map(({ title, fn, ...props }, index) => {
+                  return (
+                    <MenuItem
+                      key={index}
+                      onClick={this.onHandlerItem(fn)}
+                      {...props}
+                    >
+                      {title}
+                    </MenuItem>
+                  )
+                })
               }
             </Menu>
           )
@@ -66,6 +72,8 @@ DottedMenu.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     fn: PropTypes.func,
+    component: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]),
+    to: PropTypes.string,
   }))
 };
 
