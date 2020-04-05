@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import isEmpty from 'lodash/isEmpty';
-import isArray from "lodash/isArray";
 import cloneDeep from 'lodash/cloneDeep';
 import has from 'lodash/has'
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 
-import { styles } from './index';
+import { mergeNewTranslations, styles } from "./index";
 import { wordUpdate, wordRemove } from "../../store/words";
 import { Word as NewWord, Submit, AddNewTranslation } from "../New";
 import Translations from './Translations';
@@ -32,9 +31,10 @@ class Word extends Component {
 
   onSave = () => {
     const { onUpdate } = this.props;
-    const { id, word } = this.state;
+    const { id, word, newTranslation } = this.state;
+    const newWord = mergeNewTranslations(word, newTranslation);
 
-    onUpdate(id, word);
+    onUpdate(id, newWord).then(() => this.setState({ newTranslation: '' }));
   }
 
   onNewTranslationChange = ({ target: { value }}) => {
@@ -43,14 +43,9 @@ class Word extends Component {
 
   onNewTranslationsAdd = () => {
     const { word, newTranslation } = this.state;
-    const newWord = cloneDeep(word);
-    newWord.translations = !isArray(newWord.translations)
-      ? []
-      : newWord.translations;
-    newWord.translations.push(newTranslation.trim());
 
     this.setState({
-      word: newWord,
+      word: mergeNewTranslations(word, newTranslation),
       newTranslation: '',
     });
   }

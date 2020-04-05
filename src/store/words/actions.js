@@ -51,7 +51,7 @@ const wordsFetch = () => async dispatch => {
 };
 
 const wordUpdate = (id, updateWord) => dispatch => {
-  WordsService.update(id, updateWord)
+  return WordsService.update(id, updateWord)
     .then(() => {
       dispatch(wordUpdateSuccess(id, updateWord));
       dispatch(alertShow("success", "Word update success"));
