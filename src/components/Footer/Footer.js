@@ -1,12 +1,5 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import {
-  compose,
-  withState,
-  withHandlers,
-  setPropTypes,
-  setDisplayName
-} from "recompose";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
@@ -36,33 +29,35 @@ const Logo = withStyles(styles)(({ classes, onEnter, onLeave }) => (
   </span>
 ));
 
-const footer = compose(
-  setDisplayName("Footer"),
+class Footer extends PureComponent {
+  state = {
+    isShow: false
+  }
 
-  setPropTypes({
-    classes: PropTypes.object.isRequired
-  }),
+  onEnter = () => this.setState({ isShow: true })
 
-  withState("isShow", "onIsShowHandler", false),
+  onLeave = () => this.setState({ isShow: false })
 
-  withHandlers({
-    onEnter: ({ onIsShowHandler }) => () => onIsShowHandler(true),
-    onLeave: ({ onIsShowHandler }) => () => onIsShowHandler(false)
-  })
-)(({ classes, isShow, onEnter, onLeave }) => (
-  <footer className={classes.root}>
-    <Typography variant="subtitle1" color="textSecondary" component="p">
-      <span role="img" aria-label="hammer and wrench">
-        &#x1F6E0;
-      </span>{" "}
-      ->{" "}
-      <span role="img" aria-label="red heart">
-        &#x2764;
-      </span>{" "}
-      -> <Logo onEnter={onEnter} onLeave={onLeave} />{" "}
-      {isShow ? <EasterEggs /> : null}
-    </Typography>
-  </footer>
-));
+  render() {
+    const { isShow } = this.state;
+    const { classes } = this.props;
 
-export default withStyles(styles)(footer);
+    return (
+      <footer className={classes.root}>
+        <Typography variant="subtitle1" color="textSecondary" component="p">
+          <span role="img" aria-label="hammer and wrench">&#x1F6E0;</span>{" "}
+          ->{" "}
+          <span role="img" aria-label="red heart">&#x2764;</span>{" "}
+          -> <Logo onEnter={this.onEnter} onLeave={this.onLeave} />{" "}
+          {isShow ? <EasterEggs /> : null}
+        </Typography>
+      </footer>
+    )
+  }
+}
+
+Footer.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(Footer);
