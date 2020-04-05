@@ -14,7 +14,8 @@ const mapDispatchToProps = dispatch => ({
 
 class SignOut extends PureComponent {
   componentDidMount() {
-    this.props.onSignOut();
+    const { onSignOut, history } = this.props;
+    onSignOut().then(() => history.push('/'));
   }
 
   render() {

@@ -1,4 +1,3 @@
-import history from "../../history";
 import { alertShow } from "../alerts";
 import { AuthService } from "./index";
 
@@ -24,8 +23,8 @@ const authSignIn = (email, password) => async dispatch => {
     // ToDo: show spinner
     const user = await AuthService.signIn(email, password);
     dispatch(authSignInSuccess(user));
-    history.push("/");
     dispatch(alertShow("success", "SignIn Successfully"));
+    return Promise.resolve()
   } catch (e) {
     dispatch(authReset());
     dispatch(alertShow("error", e.message || "Auth failure"));
@@ -33,12 +32,12 @@ const authSignIn = (email, password) => async dispatch => {
 };
 
 const authSignOut = () => dispatch => {
-  AuthService.signOut()
+  return AuthService.signOut()
     .then(() => dispatch(alertShow("success", "LogOut Successfully")))
     .catch(() => dispatch(alertShow("error", "LogOut Failure")))
     .finally(() => {
       dispatch(authReset());
-      history.push("/");
+      return Promise.resolve()
     });
 };
 

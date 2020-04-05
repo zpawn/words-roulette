@@ -1,18 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  compose,
-  withState,
-  withHandlers,
-  setDisplayName,
-  withPropsOnChange
-} from "recompose";
-
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-
-import history from "../../../history";
-import { initForm, authSignIn } from "../../../store/auth";
+import { authSignIn } from "../../../store/auth";
 import Button from "../../UI/Button";
 
 ////
@@ -27,65 +17,63 @@ const mapDispatchToProps = dispatch => ({
 
 ////
 
-const signIn = compose(
-  setDisplayName("Auth"),
+class SignIn extends Component {
+  state = {
+    email: "",
+    password: "",
+  }
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  onChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value })
+  }
 
-  withState("form", "onFormHandler", initForm),
+  onSubmit = (e) => {
+    e.preventDefault();
 
-  withHandlers({
-    onChange: ({ form, onFormHandler }) => ({ target: { name, value } }) => {
-      const updated = Object.assign({}, form, { [name]: value });
-      onFormHandler(updated);
-    },
+    const { email, password } = this.state;
+    const { onSignIn, history } = this.props;
 
-    onSubmit: ({ form: { email, password }, onSignIn }) => e => {
-      e.preventDefault();
-      onSignIn(email, password);
-    }
-  }),
+    onSignIn(email, password).then(() => history.push("/"));
+  }
 
-  withPropsOnChange(["isSignIn"], ({ isSignIn }) => {
-    if (isSignIn) {
-      history.push("/");
-    }
-  })
-)(({ onChange, onSubmit, form: { email, password } }) => (
-  <>
-    <Typography align="center" variant="h4">
-      SignIn
-    </Typography>
+  render() {
+    const { email, password } = this.state;
+    const {} = this.props;
 
-    <form onSubmit={onSubmit}>
-      <TextField
-        autoFocus
-        fullWidth
-        id="email"
-        label="Email"
-        margin="normal"
-        name="email"
-        value={email}
-        onChange={onChange}
-      />
+    return (
+      <>
+        <Typography align="center" variant="h4">
+          SignIn
+        </Typography>
 
-      <TextField
-        fullWidth
-        type="password"
-        id="password"
-        label="password"
-        name="password"
-        value={password}
-        margin="normal"
-        onChange={onChange}
-      />
+        <form onSubmit={this.onSubmit}>
+          <TextField
+            autoFocus
+            fullWidth
+            id="email"
+            label="Email"
+            margin="normal"
+            name="email"
+            value={email}
+            onChange={this.onChange}
+          />
 
-      <Button type="submit">Send</Button>
-    </form>
-  </>
-));
+          <TextField
+            fullWidth
+            type="password"
+            id="password"
+            label="password"
+            name="password"
+            value={password}
+            margin="normal"
+            onChange={this.onChange}
+          />
 
-export default signIn;
+          <Button type="submit">Send</Button>
+        </form>
+      </>
+    )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
