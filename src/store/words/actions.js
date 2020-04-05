@@ -29,11 +29,6 @@ const wordUpdateSuccess = (id, word) => ({
   word,
 });
 
-// const wordSaveSuccess = word => ({
-//   type: actionTypes.WORD_SAVE_SUCCESS,
-//   word,
-// });
-
 const wordRemoveSuccess = wordId => ({
   type: actionTypes.WORD_REMOVE_SUCCESS,
   wordId,
@@ -64,7 +59,18 @@ const wordUpdate = (id, updateWord) => dispatch => {
     .catch((err) => dispatch(alertShow("error", err)))
 };
 
-const wordSave = (word) => dispatch => dispatch(wordUpdate(word.name, word));
+const wordSave = (word) => dispatch => {
+  const id = word.name.toLowerCase();
+
+  return WordsService.save(id, word)
+    .then(() => {
+      dispatch(wordUpdateSuccess(id, word));
+      dispatch(alertShow("success", "Word save success"));
+      return id;
+    })
+    .catch((err) =>
+      dispatch(alertShow('error', err.message || 'Word save failure')))
+};
 
 const wordRemove = wordId => (dispatch, getState) => {
   const {

@@ -37,12 +37,6 @@ const wordUpdateSuccess = (state, { id, word }) => {
   return updated;
 };
 
-const wordSaveSuccess = (state, { word }) => {
-  const updated = _cloneDeep(state);
-  updated.items[word.id] = word;
-  return updated;
-};
-
 const wordRemoveSuccess = (state, { wordId }) => {
   const updated = _cloneDeep(state);
   updated.items = _omit(updated.items, [wordId]);
@@ -61,8 +55,6 @@ export const reducer = (state = INIT_STATE, action) => {
       return wordsFetchFail(state, action);
     case actionTypes.WORD_UPDATE_SUCCESS:
       return wordUpdateSuccess(state, action);
-    case actionTypes.WORD_SAVE_SUCCESS:
-      return wordSaveSuccess(state, action);
     case actionTypes.WORD_REMOVE_SUCCESS:
       return wordRemoveSuccess(state, action);
     default:

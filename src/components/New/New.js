@@ -1,140 +1,80 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  compose,
-  withProps,
-  withHandlers,
-  setDisplayName,
-  withStateHandlers
-} from "recompose";
-import _cloneDeep from "lodash/cloneDeep";
-
+import isEmpty from "lodash/isEmpty"
 import Typography from "@material-ui/core/Typography";
 
 import { wordSave } from "../../store/words";
-import { initForm } from "./index";
 import Word from "./Word";
-import Translations from "./Translations";
-import AddNewTranslation from "./AddNewTranslation";
 import Submit from "./Submit";
 
 ////
 
 const mapDispatchToProps = dispatch => ({
-  onSave: (newWord, newTranslations) =>
-    dispatch(wordSave(newWord, newTranslations))
+  onSave: (word) => dispatch(wordSave(word))
 });
 
 ////
 
-const New = compose(
-  setDisplayName("New"),
-
-  connect(
-    null,
-    mapDispatchToProps
-  ),
-
-  withProps({
-    name: "newWord"
-  }),
-
-  withStateHandlers(
-    {
-      form: _cloneDeep(initForm),
-      disabled: false,
-      isSuccess: true
+class New extends Component {
+  state = {
+    word: {
+      name: '',
     },
-    {
-      onChangeForm: () => form => ({ form }),
-      onDisabledHandler: () => disabled => ({ disabled })
-    }
-  ),
+    processing: false,
+    isSuccess: true
+  };
 
-  withHandlers({
-    onChange: ({ form, onChangeForm }) => ({ target: { name, value } }) => {
-      const updated = _cloneDeep(form);
-      updated[name] = value;
-      onChangeForm(updated);
-    },
-
-    onAddTranslations: ({ form, onChangeForm }) => () => {
-      const updated = _cloneDeep(form);
-
-      if (!updated.newTranslation.length) {
-        return;
+  onChangeWord = ({ target: { value } }) => {
+    this.setState({
+      word: {
+        ...this.state.word,
+        name: value
       }
+    });
+  };
 
-      updated.newTranslations.push(updated.newTranslation);
-      updated.newTranslation = "";
+  onSubmit = (e) => {
+    e.preventDefault();
+    const { onSave, history } = this.props;
+    const { word } = this.state;
+    word.name = word.name.trim();
 
-      onChangeForm(updated);
-    },
-
-    onReset: ({ onChangeForm }) => () => onChangeForm(_cloneDeep(initForm)),
-
-    onDisableForm: ({ onDisabledHandler }) => () => onDisabledHandler(true),
-
-    onEnableForm: ({ onDisabledHandler }) => () => onDisabledHandler(false)
-  }),
-
-  withHandlers({
-    onSubmit: ({ form, onSave, onReset, onDisableForm, onEnableForm }) => e => {
-      e.preventDefault();
-      let { newWord, newTranslation, newTranslations } = _cloneDeep(form);
-      newWord = newWord.trim();
-      newTranslation = newTranslation.trim();
-
-      if (newWord.length && (newTranslation.length || newTranslations.length)) {
-        if (newTranslation.length) {
-          newTranslations.push(newTranslation);
-        }
-        onDisableForm(true);
-
-        onSave(newWord, newTranslations)
-          .then(() => onReset())
-          .catch(() => onEnableForm())
-          .finally(() => onEnableForm());
-      }
+    if (!isEmpty(word.name)) {
+      this.setState({ disabled: true });
+      onSave(word)
+        .then((id) => {
+          history.push(`/words/${id}`)
+        })
+        .catch(() => this.setState({ processing: false }))
+        .finally(() => this.setState({ processing: false }))
     }
-  })
-)(
-  ({
-    name,
-    classes,
-    disabled,
-    onChange,
-    onSubmit,
-    isSuccess,
-    onAddTranslations,
-    form: { newWord, newTranslation, newTranslations }
-  }) => (
-    <>
-      <form noValidate autoComplete="off">
-        <Typography align="center" variant="h4">
-          New Word
-        </Typography>
+  };
 
-        <Word
-          name={name}
-          word={newWord}
-          onChange={onChange}
-          disabled={disabled}
-        />
+  render() {
+    const { word: { name }, processing } = this.state;
+    const {  } = this.props;
+    return (
+      <>
+        <form noValidate autoComplete="off">
+          <Typography align="center" variant="h4">
+            New Word
+          </Typography>
 
-        <Translations translations={newTranslations} disabled={disabled} />
+          <Word
+            name="newWord"
+            word={name}
+            onChange={this.onChangeWord}
+            disabled={processing}
+          />
 
-        <AddNewTranslation
-          newTranslation={newTranslation}
-          onChange={onChange}
-          disabled={disabled}
-          onAddTranslations={onAddTranslations}
-        />
+          <Submit onSubmit={this.onSubmit} disabled={processing} />
+        </form>
+      </>
+    )
+  }
+}
 
-        <Submit onSubmit={onSubmit} disabled={disabled} />
-      </form>
-    </>
-  )
-);
-
-export default New;
+export default connect(
+  null,
+  mapDispatchToProps
+)(New);

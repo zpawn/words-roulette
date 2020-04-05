@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import SignIn from "./Auth/SignIn";
 import SignOut from "./Auth/SignOut";
-import New from "./New";
+import { New } from "./New";
 import Words from "./Words";
 import Word from "./Word";
 import RouletteSettings from "./RouletteSettings";
