@@ -1,5 +1,4 @@
-import React from "react";
-import { withState } from "recompose";
+import React, { PureComponent } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 
@@ -8,22 +7,32 @@ import NavigationItems from "./NavigationItems";
 
 ////
 
-const navigation = withState("isOpen", "isOpenToggle", false)(
-  ({ isOpen, isOpenToggle }) => (
-    <AppBar position="static">
-      <TopAppBar onClick={isOpenToggle} />
-      <Drawer open={isOpen} onClose={() => isOpenToggle(false)}>
-        <div
-          tabIndex={0}
-          role="button"
-          onClick={() => isOpenToggle(false)}
-          onKeyDown={() => isOpenToggle(false)}
-        >
-          <NavigationItems />
-        </div>
-      </Drawer>
-    </AppBar>
-  )
-);
+class Navigation extends PureComponent {
+  state = {
+    isOpen: false
+  };
 
-export default navigation;
+  isOpenToggle = () => this.setState({ isOpen: !this.state.isOpen });
+
+  render() {
+    const { isOpen } = this.state;
+
+    return (
+      <AppBar position="static">
+        <TopAppBar onClick={this.isOpenToggle} />
+        <Drawer open={isOpen} onClose={() => this.isOpenToggle(false)}>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={() => this.isOpenToggle(false)}
+            onKeyDown={() => this.isOpenToggle(false)}
+          >
+            <NavigationItems />
+          </div>
+        </Drawer>
+      </AppBar>
+    )
+  }
+}
+
+export default Navigation;
