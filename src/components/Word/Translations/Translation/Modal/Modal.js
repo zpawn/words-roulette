@@ -1,14 +1,5 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import {
-  compose,
-  withState,
-  setPropTypes,
-  defaultProps,
-  withHandlers,
-  setDisplayName,
-  withPropsOnChange
-} from "recompose";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -19,65 +10,70 @@ import TextField from "@material-ui/core/TextField";
 
 ////
 
-const modal = compose(
-  setDisplayName("TranslationModal"),
+class Modal extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  defaultProps({
-    isOpen: false
-  }),
+    const { translation = '' } = props;
+    this.state = { value: translation };
+  }
 
-  setPropTypes({
-    id: PropTypes.number,
-    translation: PropTypes.string,
-    labels: PropTypes.array,
-    onChange: PropTypes.func,
-    isOpen: PropTypes.bool,
-    onClose: PropTypes.func
-  }),
+  onChangeValue = ({ target: { value } }) => this.setState({ value });
 
-  withState("value", "onValueHandler", ""),
+  onSave = () => {
+    const { value } = this.state;
+    const { onChange, onClose } = this.props;
+    onClose();
+    onChange(value);
+  };
 
-  withHandlers({
-    onChangeValue: ({ onValueHandler }) => ({ target: { value } }) =>
-      onValueHandler(value),
+  render() {
+    const { value } = this.state;
+    const { id, isOpen, onClose } = this.props;
 
-    onSave: ({ value, onChange, onClose }) => () => {
-      onClose();
-      onChange(value);
-    }
-  }),
+    return (
+      <Dialog
+        fullWidth={true}
+        maxWidth="lg"
+        open={isOpen}
+        onClose={onClose}
+        aria-labelledby="modal-translation"
+      >
+        <DialogTitle id="modal-translation">Edit</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            fullWidth
+            id={`Translation-${id}`}
+            margin="normal"
+            value={value}
+            onChange={this.onChangeValue}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.onSave} variant="contained" color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+}
 
-  withPropsOnChange(["translation"], ({ translation, onValueHandler }) =>
-    onValueHandler(translation)
-  )
-)(({ isOpen, onClose, id, value, onChangeValue, onSave }) => (
-  <Dialog
-    fullWidth={true}
-    maxWidth="lg"
-    open={isOpen}
-    onClose={onClose}
-    aria-labelledby="modal-translation"
-  >
-    <DialogTitle id="modal-translation">Edit</DialogTitle>
-    <DialogContent>
-      <TextField
-        autoFocus
-        fullWidth
-        id={`Translation-${id}`}
-        margin="normal"
-        value={value}
-        onChange={onChangeValue}
-      />
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={onClose} color="primary">
-        Cancel
-      </Button>
-      <Button onClick={onSave} variant="contained" color="primary">
-        Save
-      </Button>
-    </DialogActions>
-  </Dialog>
-));
+Modal.defaultProps = {
+  isOpen: false,
+};
 
-export default modal;
+Modal.propTypes = {
+  id: PropTypes.number,
+  translation: PropTypes.string,
+  labels: PropTypes.array,
+  onChange: PropTypes.func,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+};
+
+export default Modal;
