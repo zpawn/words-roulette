@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose } from "recompose";
+import { compose } from 'redux'
 import _isEmpty from "lodash/isEmpty";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -57,8 +57,5 @@ wordsRow.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
+  connect(mapStateToProps, mapDispatchToProps)
 )(wordsRow);

@@ -1,13 +1,6 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-import {
-  compose,
-  withState,
-  withHandlers,
-  setPropTypes,
-  setDisplayName
-} from "recompose";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -23,95 +16,88 @@ import { styles } from "./index";
 
 ////
 
-const dottedMenu = compose(
-  setDisplayName("WordsDottedMenu"),
+class DottedMenu extends PureComponent {
+  state = {
+    anchorEl: null,
+    isDialogOpen: false,
+  };
 
-  withStyles(styles),
+  anchorElHandler = (anchorEl) => this.setState({ anchorEl });
 
-  setPropTypes({
-    wordId: PropTypes.string.isRequired,
-    onWordRemove: PropTypes.func.isRequired
-  }),
+  isDialogOpenHandler = (isDialogOpen) => this.setState({ isDialogOpen });
 
-  withState("anchorEl", "anchorElHandler", null),
-  withState("isDialogOpen", "isDialogOpenHandler", false),
+  onMenuOpen = (e) => this.anchorElHandler(e.currentTarget);
 
-  withHandlers({
-    onMenuOpen: ({ anchorElHandler }) => e => anchorElHandler(e.currentTarget),
+  onMenuClose = () => this.anchorElHandler(null);
 
-    onMenuClose: ({ anchorElHandler }) => () => anchorElHandler(null)
-  }),
+  onDialogOpen = () => this.isDialogOpenHandler(true);
 
-  withHandlers({
-    onDialogOpen: ({ isDialogOpenHandler }) => () => isDialogOpenHandler(true),
+  onDialogClose = () => {
+    this.isDialogOpenHandler(false);
+    this.onMenuClose();
+  };
 
-    onDialogClose: ({ isDialogOpenHandler, onMenuClose }) => () => {
-      isDialogOpenHandler(false);
-      onMenuClose();
-    }
-  }),
+  onRemove = () => {
+    const { wordId, onWordRemove } = this.props;
 
-  withHandlers({
-    onRemove: ({ wordId, onWordRemove, onMenuClose, onDialogClose }) => () => {
-      onWordRemove(wordId);
-      onDialogClose();
-      onMenuClose();
-    }
-  })
-)(
-  ({
-    classes,
-    wordId,
-    anchorEl,
-    onMenuOpen,
-    onMenuClose,
-    onRemove,
-    isDialogOpen,
-    onDialogOpen,
-    onDialogClose
-  }) => (
-    <>
-      <IconButton
-        aria-owns={anchorEl ? "dottedMenu" : undefined}
-        aria-haspopup="true"
-        onClick={onMenuOpen}
-      >
-        <MoreVertIcon />
-      </IconButton>
+    onWordRemove(wordId);
+    this.onDialogClose();
+    this.onMenuClose();
+  };
 
-      <Menu
-        id="dottedMenu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={onMenuClose}
-      >
-        <MenuItem
-          onClick={onMenuClose}
-          component={NavLink}
-          to={`/words/${wordId}`}
+  render() {
+    const { anchorEl, isDialogOpen } = this.state;
+    const { wordId, classes } = this.props;
+
+    return (
+      <>
+        <IconButton
+          aria-owns={anchorEl ? "dottedMenu" : undefined}
+          aria-haspopup="true"
+          onClick={this.onMenuOpen}
         >
-          Edit
-        </MenuItem>
-        <MenuItem onClick={onDialogOpen}>Remove</MenuItem>
-      </Menu>
+          <MoreVertIcon />
+        </IconButton>
 
-      <Dialog
-        open={isDialogOpen}
-        onClose={onDialogClose}
-        aria-labelledby="dialog-submit-title"
-      >
-        <DialogTitle id="dialog-submit-title">Are you sure?</DialogTitle>
-        <DialogActions className={classes.DialogButtons}>
-          <Button onClick={onDialogClose} color="primary">
-            No
-          </Button>
-          <Button onClick={onRemove} color="primary" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  )
-);
+        <Menu
+          id="dottedMenu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.onMenuClose}
+        >
+          <MenuItem
+            onClick={this.onMenuClose}
+            component={NavLink}
+            to={`/words/${wordId}`}
+          >
+            Edit
+          </MenuItem>
+          <MenuItem onClick={this.onDialogOpen}>Remove</MenuItem>
+        </Menu>
 
-export default dottedMenu;
+        <Dialog
+          open={isDialogOpen}
+          onClose={this.onDialogClose}
+          aria-labelledby="dialog-submit-title"
+        >
+          <DialogTitle id="dialog-submit-title">Are you sure?</DialogTitle>
+          <DialogActions className={classes.DialogButtons}>
+            <Button onClick={this.onDialogClose} color="primary">
+              No
+            </Button>
+            <Button onClick={this.onRemove} color="primary" autoFocus>
+              Yes
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
+    )
+  }
+}
+
+DottedMenu.propTypes = {
+  wordId: PropTypes.string.isRequired,
+  onWordRemove: PropTypes.func.isRequired
+};
+
+export default withStyles(styles)(DottedMenu);
