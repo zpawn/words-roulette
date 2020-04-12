@@ -7,13 +7,12 @@ import ThemeProvider from "./hoc/ThemeProvider";
 import App from "./App";
 import "./index.css";
 import { store } from "./store";
-import history from "./history";
 
 ////
 
 const app = (
   <Provider store={store}>
-    <Router history={history}>
+    <Router>
       <ThemeProvider>
         <App />
       </ThemeProvider>

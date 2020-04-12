@@ -28,6 +28,7 @@ const authSignIn = (email, password) => async dispatch => {
   } catch (e) {
     dispatch(authReset());
     dispatch(alertShow("error", e.message || "Auth failure"));
+    return Promise.reject()
   }
 };
 

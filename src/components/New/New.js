@@ -52,7 +52,7 @@ class New extends Component {
 
   render() {
     const { word: { name }, processing } = this.state;
-    const {  } = this.props;
+
     return (
       <>
         <form noValidate autoComplete="off">

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
 
 ////
 
-class SignIn extends Component {
+class SignIn extends PureComponent {
   state = {
     email: "",
     password: "",
@@ -38,7 +38,6 @@ class SignIn extends Component {
 
   render() {
     const { email, password } = this.state;
-    const {} = this.props;
 
     return (
       <>
