@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { compose } from 'redux';
 import PropTypes from "prop-types";
-import { compose, setPropTypes, setDisplayName } from "recompose";
 import _isEmpty from "lodash/isEmpty";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -18,16 +18,7 @@ const mapStateToProps = state => ({
 
 ////
 
-const alerts = compose(
-  setDisplayName("Alerts"),
-
-  setPropTypes({
-    alerts: PropTypes.array,
-    classes: PropTypes.object.isRequired
-  }),
-
-  connect(mapStateToProps)
-)(({ classes, alerts }) => {
+const alerts = ({ classes, alerts }) => {
   return _isEmpty(alerts) ? null : (
     <Snackbar
       className={classes.Alert}
@@ -43,7 +34,15 @@ const alerts = compose(
         ))}
       </div>
     </Snackbar>
-  );
-});
+  )
+};
 
-export default withStyles(styles)(alerts);
+alerts.propTypes = {
+  alerts: PropTypes.array,
+  classes: PropTypes.object.isRequired
+};
+
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps),
+)(alerts);

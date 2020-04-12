@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose, defaultProps, setPropTypes, setDisplayName } from "recompose";
+import { compose } from 'redux'
 
 import { withStyles } from "@material-ui/core/styles";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
@@ -17,43 +17,39 @@ const mapDispatchToProps = dispatch => ({
   onRemove: id => dispatch(alertRemove(id))
 });
 
-const alert = compose(
-  setDisplayName("Alert"),
+const alert = ({ id, classes, variant, message, onRemove }) => {
+  return (
+    <SnackbarContent
+      className={[classes.Alert, classes[variant]].join(" ")}
+      aria-describedby="client-snackbar"
+      message={message}
+      action={[
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          onClick={() => onRemove(id)}
+        >
+          <CloseIcon />
+        </IconButton>
+      ]}
+    />
+  )
+};
 
+alert.defaultProps = {
+  variant: "success"
+};
+
+alert.propTypes = {
+  classes: PropTypes.object,
+  id: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  variant: PropTypes.oneOf(["success", "warning", "error", "info", "default"])
+};
+
+export default compose(
   withStyles(styles),
-
-  connect(
-    null,
-    mapDispatchToProps
-  ),
-
-  defaultProps({
-    variant: "success"
-  }),
-
-  setPropTypes({
-    classes: PropTypes.object,
-    id: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    variant: PropTypes.oneOf(["success", "warning", "error", "info", "default"])
-  })
-)(({ id, classes, variant, message, onRemove }) => (
-  <SnackbarContent
-    className={[classes.Alert, classes[variant]].join(" ")}
-    aria-describedby="client-snackbar"
-    message={message}
-    action={[
-      <IconButton
-        key="close"
-        aria-label="Close"
-        color="inherit"
-        onClick={() => onRemove(id)}
-      >
-        <CloseIcon />
-      </IconButton>
-    ]}
-  />
-));
-
-export default alert;
+  connect(null, mapDispatchToProps)
+)(alert);
