@@ -6,12 +6,14 @@ import AgainButton from "./AgainButton";
 
 ////
 
-const rouletteResult = () => (
-  <>
-    <TotalScore />
-    <ResultTable />
-    <AgainButton />
-  </>
-);
+const rouletteResult = () => {
+  return (
+    <>
+      <TotalScore />
+      <ResultTable />
+      <AgainButton />
+    </>
+  );
+}
 
 export default rouletteResult;

@@ -5,6 +5,11 @@ export {
   rouletteChangeAnswer
 } from "./actions";
 
-export { getSteps, initStateField, getRandomWordIds } from "./utility";
+export {
+  getSteps,
+  getValidScore,
+  initStateField,
+  getRandomWordIds,
+} from "./utility";
 
 export { reducer as rouletteReducer } from "./reducer";

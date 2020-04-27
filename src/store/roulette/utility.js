@@ -43,3 +43,28 @@ export const getSteps = wordIds =>
     ...initStateField,
     wordId: id
   }));
+
+/**
+ * @param {Object} words
+ * @param {Array} steps
+ * @returns {Number}
+ */
+export const getValidScore = (words, steps) => {
+  return steps.reduce((result, step) => {
+
+    const { answer, wordId } = step;
+    const { translations } = words[wordId];
+
+    const t = Object.keys(translations).map(id =>
+      translations[id].toLowerCase()
+    );
+
+    const isValid = t.includes(answer.toLowerCase());
+
+    if (isValid) {
+      result += 1;
+    }
+
+    return result;
+  }, 0);
+};

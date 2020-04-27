@@ -1,9 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { compose, withHandlers, setDisplayName } from "recompose";
 
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+
+import { getValidScore } from '../../../store/roulette';
 
 ////
 
@@ -15,42 +16,21 @@ const mapStateToProps = state => ({
 
 ////
 
-const totalScore = compose(
-  setDisplayName("RouletteTotalScore"),
+const TotalScore = ({ words, steps, count }) => {
+  console.log('>>> TotalScore', words, steps, count);
+  return (
+    <Grid container justify="space-around" alignItems="flex-end">
+      <Grid item>
+        <Typography>Score:</Typography>
+      </Grid>
 
-  connect(mapStateToProps),
-
-  withHandlers({
-    getValidScore: ({ words, steps }) => () => {
-      return steps.reduce((result, step) => {
-        const { answer, wordId } = step;
-        const { translations } = words[wordId];
-
-        const t = Object.keys(translations).map(id =>
-          translations[id].translation.toLowerCase()
-        );
-        const isValid = t.includes(answer.toLowerCase());
-
-        if (isValid) {
-          result += 1;
-        }
-
-        return result;
-      }, 0);
-    }
-  })
-)(({ count, getValidScore }) => (
-  <Grid container justify="space-around" alignItems="flex-end">
-    <Grid item>
-      <Typography>Score:</Typography>
+      <Grid item>
+        <Typography variant="h3">
+          {getValidScore(words, steps)}/{count}
+        </Typography>
+      </Grid>
     </Grid>
+  );
+}
 
-    <Grid item>
-      <Typography variant="h3">
-        {getValidScore()}/{count}
-      </Typography>
-    </Grid>
-  </Grid>
-));
-
-export default totalScore;
+export default connect(mapStateToProps)(TotalScore);

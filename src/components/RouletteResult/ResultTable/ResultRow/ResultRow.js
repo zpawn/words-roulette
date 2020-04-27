@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose } from "recompose";
+import { compose } from "redux";
 
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/es/Typography/Typography";
@@ -27,7 +27,7 @@ const resultRow = ({ classes, steps, words }) => (
     {steps.map(({ question, answer, wordId }) => {
       const { translations } = words[wordId];
       const t = Object.keys(translations).map(id =>
-        translations[id].translation.toLowerCase()
+        translations[id].toLowerCase()
       );
       const isValid = t.includes(answer.toLowerCase());
 

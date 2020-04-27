@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { compose, setPropTypes, withHandlers, setDisplayName } from "recompose";
 
 import { withStyles } from "@material-ui/core/styles";
@@ -10,7 +11,6 @@ import DoneIcon from "@material-ui/icons/Done";
 import PrevIcon from "@material-ui/icons/ChevronLeft";
 import NextIcon from "@material-ui/icons/ChevronRight";
 
-import history from "../../../history";
 import { rouletteChangeStep } from "../../../store/roulette";
 import { styles } from "./index";
 
@@ -53,8 +53,6 @@ const controls = compose(
         onChangeStep(update);
       }
     },
-
-    onFinish: () => () => history.push("/roulette/result")
   })
 )(({ classes, activeStep, onPrevStep, onNextStep, onFinish }) => (
   <Typography align="center">
@@ -74,7 +72,8 @@ const controls = compose(
       aria-label="Finish"
       color="primary"
       type="button"
-      onClick={onFinish}
+      component={NavLink}
+      to="/roulette/result"
     >
       <DoneIcon className={classes.iconAnswer} />
       Finish
