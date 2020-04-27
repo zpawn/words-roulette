@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
@@ -74,5 +75,11 @@ class SignIn extends PureComponent {
     );
   }
 }
+
+SignIn.propTypes = {
+  isSignIn: PropTypes.bool,
+  onSignIn: PropTypes.func,
+  history: PropTypes.object
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

@@ -96,6 +96,7 @@ class DottedMenu extends PureComponent {
 }
 
 DottedMenu.propTypes = {
+  classes: PropTypes.object,
   wordId: PropTypes.string.isRequired,
   onWordRemove: PropTypes.func.isRequired
 };

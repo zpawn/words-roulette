@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import isEmpty from "lodash/isEmpty";
 import Typography from "@material-ui/core/Typography";
@@ -76,5 +77,10 @@ class New extends Component {
     );
   }
 }
+
+New.propTypes = {
+  onSave: PropTypes.func,
+  history: PropTypes.object
+};
 
 export default connect(null, mapDispatchToProps)(New);

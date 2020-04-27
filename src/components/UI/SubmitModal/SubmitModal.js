@@ -56,8 +56,9 @@ class SubmitModal extends Component {
 }
 
 SubmitModal.propTypes = {
+  fn: PropTypes.func,
   isOpen: PropTypes.bool,
-  fn: PropTypes.func
+  classes: PropTypes.object
 };
 
 export default withStyles(styles)(SubmitModal);

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import isEmpty from "lodash/isEmpty";
@@ -124,6 +125,14 @@ class Word extends Component {
     );
   }
 }
+
+Word.propTypes = {
+  words: PropTypes.object,
+  match: PropTypes.object,
+  onUpdate: PropTypes.func,
+  onRemove: PropTypes.func,
+  classes: PropTypes.object
+};
 
 export default compose(
   withStyles(styles),

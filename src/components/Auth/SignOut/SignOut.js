@@ -24,6 +24,7 @@ class SignOut extends PureComponent {
 }
 
 SignOut.propTypes = {
+  history: PropTypes.object,
   onSignOut: PropTypes.func.isRequired
 };
 
