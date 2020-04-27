@@ -29,7 +29,7 @@ translation.propTypes = {
   translation: PropTypes.string,
   id: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired
 };
 
 export default translation;

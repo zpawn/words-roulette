@@ -63,7 +63,4 @@ resultRow.propTypes = {
   words: PropTypes.object
 };
 
-export default compose(
-  withStyles(styles),
-  connect(mapStateToProps)
-)(resultRow);
+export default compose(withStyles(styles), connect(mapStateToProps))(resultRow);

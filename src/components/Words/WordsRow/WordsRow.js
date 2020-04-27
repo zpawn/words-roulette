@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose } from 'redux'
+import { compose } from "redux";
 import _isEmpty from "lodash/isEmpty";
 
 import { withStyles } from "@material-ui/core/styles";

@@ -24,11 +24,11 @@ const authSignIn = (email, password) => async dispatch => {
     const user = await AuthService.signIn(email, password);
     dispatch(authSignInSuccess(user));
     dispatch(alertShow("success", "SignIn Successfully"));
-    return Promise.resolve()
+    return Promise.resolve();
   } catch (e) {
     dispatch(authReset());
     dispatch(alertShow("error", e.message || "Auth failure"));
-    return Promise.reject()
+    return Promise.reject();
   }
 };
 
@@ -38,7 +38,7 @@ const authSignOut = () => dispatch => {
     .catch(() => dispatch(alertShow("error", "LogOut Failure")))
     .finally(() => {
       dispatch(authReset());
-      return Promise.resolve()
+      return Promise.resolve();
     });
 };
 

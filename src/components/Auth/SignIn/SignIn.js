@@ -20,21 +20,21 @@ const mapDispatchToProps = dispatch => ({
 class SignIn extends PureComponent {
   state = {
     email: "",
-    password: "",
-  }
+    password: ""
+  };
 
   onChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value })
-  }
+    this.setState({ [name]: value });
+  };
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
 
     const { email, password } = this.state;
     const { onSignIn, history } = this.props;
 
     onSignIn(email, password).then(() => history.push("/"));
-  }
+  };
 
   render() {
     const { email, password } = this.state;
@@ -71,7 +71,7 @@ class SignIn extends PureComponent {
           <Button type="submit">Send</Button>
         </form>
       </>
-    )
+    );
   }
 }
 

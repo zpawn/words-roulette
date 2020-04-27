@@ -12,11 +12,11 @@ class ActionMenu extends Component {
 
   onRemove = () => {
     const { onWordRemove } = this.props;
-    onWordRemove()
+    onWordRemove();
   };
 
   onOpen = () => {
-    this.setState({ isOpen: true })
+    this.setState({ isOpen: true });
   };
 
   render() {
@@ -33,7 +33,7 @@ class ActionMenu extends Component {
         />
         <SubmitModal isOpen={isOpen} fn={this.onRemove} />
       </>
-    )
+    );
   }
 }
 
@@ -42,4 +42,4 @@ ActionMenu.propTypes = {
   onWordRemove: PropTypes.func.isRequired
 };
 
-export default ActionMenu
+export default ActionMenu;

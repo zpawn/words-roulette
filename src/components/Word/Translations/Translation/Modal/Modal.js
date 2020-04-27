@@ -14,7 +14,7 @@ class Modal extends PureComponent {
   constructor(props) {
     super(props);
 
-    const { translation = '' } = props;
+    const { translation = "" } = props;
     this.state = { value: translation };
   }
 
@@ -59,12 +59,12 @@ class Modal extends PureComponent {
           </Button>
         </DialogActions>
       </Dialog>
-    )
+    );
   }
 }
 
 Modal.defaultProps = {
-  isOpen: false,
+  isOpen: false
 };
 
 Modal.propTypes = {
@@ -73,7 +73,7 @@ Modal.propTypes = {
   labels: PropTypes.array,
   onChange: PropTypes.func,
   isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
+  onClose: PropTypes.func
 };
 
 export default Modal;

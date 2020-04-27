@@ -51,7 +51,6 @@ export const getSteps = wordIds =>
  */
 export const getValidScore = (words, steps) => {
   return steps.reduce((result, step) => {
-
     const { answer, wordId } = step;
     const { translations } = words[wordId];
 

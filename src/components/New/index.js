@@ -6,10 +6,4 @@ import Submit from "./Submit";
 
 ////
 
-export {
-  New,
-  Word,
-  styles,
-  Submit,
-  AddNewTranslation
-};
+export { New, Word, styles, Submit, AddNewTranslation };

@@ -1,3 +1,3 @@
-import DottedMenu from './DottedMenu';
+import DottedMenu from "./DottedMenu";
 
-export { DottedMenu }
+export { DottedMenu };

@@ -32,11 +32,11 @@ const Logo = withStyles(styles)(({ classes, onEnter, onLeave }) => (
 class Footer extends PureComponent {
   state = {
     isShow: false
-  }
+  };
 
-  onEnter = () => this.setState({ isShow: true })
+  onEnter = () => this.setState({ isShow: true });
 
-  onLeave = () => this.setState({ isShow: false })
+  onLeave = () => this.setState({ isShow: false });
 
   render() {
     const { isShow } = this.state;
@@ -45,14 +45,18 @@ class Footer extends PureComponent {
     return (
       <footer className={classes.root}>
         <Typography variant="subtitle1" color="textSecondary" component="p">
-          <span role="img" aria-label="hammer and wrench">&#x1F6E0;</span>{" "}
+          <span role="img" aria-label="hammer and wrench">
+            &#x1F6E0;
+          </span>{" "}
           ->{" "}
-          <span role="img" aria-label="red heart">&#x2764;</span>{" "}
+          <span role="img" aria-label="red heart">
+            &#x2764;
+          </span>{" "}
           -> <Logo onEnter={this.onEnter} onLeave={this.onLeave} />{" "}
           {isShow ? <EasterEggs /> : null}
         </Typography>
       </footer>
-    )
+    );
   }
 }
 

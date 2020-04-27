@@ -34,10 +34,7 @@ const controls = compose(
     classes: PropTypes.object.isRequired
   }),
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 
   withHandlers({
     onPrevStep: ({ count, activeStep, onChangeStep }) => () => {
@@ -52,7 +49,7 @@ const controls = compose(
       if (update < count) {
         onChangeStep(update);
       }
-    },
+    }
   })
 )(({ classes, activeStep, onPrevStep, onNextStep, onFinish }) => (
   <Typography align="center">

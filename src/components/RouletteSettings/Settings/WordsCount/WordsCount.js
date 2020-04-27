@@ -21,10 +21,7 @@ const mapDispatchToProps = dispatch => ({
 const wordsCount = compose(
   setDisplayName("WordsCount"),
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 
   withHandlers({
     onChange: ({ onChangeSettings }) => name => e => {

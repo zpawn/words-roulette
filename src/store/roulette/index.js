@@ -9,7 +9,7 @@ export {
   getSteps,
   getValidScore,
   initStateField,
-  getRandomWordIds,
+  getRandomWordIds
 } from "./utility";
 
 export { reducer as rouletteReducer } from "./reducer";

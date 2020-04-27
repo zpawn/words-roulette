@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import isEmpty from "lodash/isEmpty"
+import isEmpty from "lodash/isEmpty";
 import Typography from "@material-ui/core/Typography";
 
 import { wordSave } from "../../store/words";
@@ -10,7 +10,7 @@ import Submit from "./Submit";
 ////
 
 const mapDispatchToProps = dispatch => ({
-  onSave: (word) => dispatch(wordSave(word))
+  onSave: word => dispatch(wordSave(word))
 });
 
 ////
@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
 class New extends Component {
   state = {
     word: {
-      name: '',
+      name: ""
     },
     processing: false,
     isSuccess: true
@@ -33,7 +33,7 @@ class New extends Component {
     });
   };
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
     const { onSave, history } = this.props;
     const { word } = this.state;
@@ -42,16 +42,19 @@ class New extends Component {
     if (!isEmpty(word.name)) {
       this.setState({ disabled: true });
       onSave(word)
-        .then((id) => {
-          history.push(`/words/${id}`)
+        .then(id => {
+          history.push(`/words/${id}`);
         })
         .catch(() => this.setState({ processing: false }))
-        .finally(() => this.setState({ processing: false }))
+        .finally(() => this.setState({ processing: false }));
     }
   };
 
   render() {
-    const { word: { name }, processing } = this.state;
+    const {
+      word: { name },
+      processing
+    } = this.state;
 
     return (
       <>
@@ -70,11 +73,8 @@ class New extends Component {
           <Submit onSubmit={this.onSubmit} disabled={processing} />
         </form>
       </>
-    )
+    );
   }
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(New);
+export default connect(null, mapDispatchToProps)(New);

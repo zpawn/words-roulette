@@ -12,14 +12,14 @@ class DottedMenu extends Component {
   static defaultProps = { items: [] };
 
   state = {
-    anchorEl: null,
+    anchorEl: null
   };
 
-  onOpen = (e) => this.setState({ anchorEl: e.currentTarget });
+  onOpen = e => this.setState({ anchorEl: e.currentTarget });
 
   onClose = () => this.setState({ anchorEl: null });
 
-  onHandlerItem = (fn) => () => {
+  onHandlerItem = fn => () => {
     fn && fn();
     this.onClose();
   };
@@ -38,43 +38,40 @@ class DottedMenu extends Component {
           <MoreVertIcon />
         </IconButton>
 
-        {!items.length
-          ? null
-          : (
-            <Menu
-              id="dottedMenu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={this.onClose}
-            >
-              {
-                items.map(({ title, fn, ...props }, index) => {
-                  return (
-                    <MenuItem
-                      key={index}
-                      onClick={this.onHandlerItem(fn)}
-                      {...props}
-                    >
-                      {title}
-                    </MenuItem>
-                  )
-                })
-              }
-            </Menu>
-          )
-        }
+        {!items.length ? null : (
+          <Menu
+            id="dottedMenu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={this.onClose}
+          >
+            {items.map(({ title, fn, ...props }, index) => {
+              return (
+                <MenuItem
+                  key={index}
+                  onClick={this.onHandlerItem(fn)}
+                  {...props}
+                >
+                  {title}
+                </MenuItem>
+              );
+            })}
+          </Menu>
+        )}
       </>
     );
   }
 }
 
 DottedMenu.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    fn: PropTypes.func,
-    component: PropTypes.oneOfType([ PropTypes.func, PropTypes.element ]),
-    to: PropTypes.string,
-  }))
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      fn: PropTypes.func,
+      component: PropTypes.oneOfType([PropTypes.func, PropTypes.element]),
+      to: PropTypes.string
+    })
+  )
 };
 
 export default DottedMenu;

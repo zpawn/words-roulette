@@ -27,7 +27,7 @@ word.propTypes = {
   name: PropTypes.string,
   word: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 export default word;

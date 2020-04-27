@@ -30,7 +30,4 @@ Preload.propTypes = {
   onFetchWords: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Preload);
+export default connect(null, mapDispatchToProps)(Preload);

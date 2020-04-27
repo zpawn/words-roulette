@@ -18,7 +18,7 @@ const wordsFetchStart = () => ({ type: actionTypes.WORDS_FETCH_START });
 
 const wordsFetchSuccess = words => ({
   type: actionTypes.WORDS_FETCH_SUCCESS,
-  words,
+  words
 });
 
 const wordsFetchFail = () => ({ type: actionTypes.WORDS_FETCH_FAIL });
@@ -26,12 +26,12 @@ const wordsFetchFail = () => ({ type: actionTypes.WORDS_FETCH_FAIL });
 const wordUpdateSuccess = (id, word) => ({
   type: actionTypes.WORD_UPDATE_SUCCESS,
   id,
-  word,
+  word
 });
 
 const wordRemoveSuccess = wordId => ({
   type: actionTypes.WORD_REMOVE_SUCCESS,
-  wordId,
+  wordId
 });
 
 ////
@@ -39,12 +39,11 @@ const wordRemoveSuccess = wordId => ({
 const wordsFetch = () => async dispatch => {
   dispatch(wordsFetchStart());
 
-  WordsService
-    .findAll()
-    .then((words) => {
-      dispatch(wordsFetchSuccess(words))
+  WordsService.findAll()
+    .then(words => {
+      dispatch(wordsFetchSuccess(words));
     })
-    .catch((err) => {
+    .catch(err => {
       dispatch(alertShow("error", err.message || "Fetched words failure"));
       dispatch(wordsFetchFail());
     });
@@ -56,10 +55,10 @@ const wordUpdate = (id, updateWord) => dispatch => {
       dispatch(wordUpdateSuccess(id, updateWord));
       dispatch(alertShow("success", "Word update success"));
     })
-    .catch((err) => dispatch(alertShow("error", err)))
+    .catch(err => dispatch(alertShow("error", err)));
 };
 
-const wordSave = (word) => dispatch => {
+const wordSave = word => dispatch => {
   const id = word.name.toLowerCase();
 
   return WordsService.save(id, word)
@@ -68,8 +67,9 @@ const wordSave = (word) => dispatch => {
       dispatch(alertShow("success", "Word save success"));
       return id;
     })
-    .catch((err) =>
-      dispatch(alertShow('error', err.message || 'Word save failure')))
+    .catch(err =>
+      dispatch(alertShow("error", err.message || "Word save failure"))
+    );
 };
 
 const wordRemove = wordId => (dispatch, getState) => {
@@ -89,7 +89,7 @@ const wordRemove = wordId => (dispatch, getState) => {
     })
     .catch(err =>
       dispatch(alertShow("error", err.message || "Word remove failure"))
-    )
+    );
 };
 
 ////

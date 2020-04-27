@@ -25,10 +25,7 @@ const mapDispatchToProps = dispatch => ({
 const qa = compose(
   setDisplayName("Q&A"),
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 
   withHandlers({
     onChange: ({ onChangeAnswer }) => key => ({ target: { value } }) =>

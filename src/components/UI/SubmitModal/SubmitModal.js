@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,10 +7,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 
-import { styles } from '.'
+import { styles } from ".";
 
 class SubmitModal extends Component {
-
   static defaultProps = { isOpen: false };
 
   state = {
@@ -23,13 +22,13 @@ class SubmitModal extends Component {
     const { fn } = this.props;
 
     fn && fn();
-    this.onClose()
+    this.onClose();
   };
 
   componentDidMount() {
     const { isOpen } = this.props;
 
-    this.setState({ isOpen })
+    this.setState({ isOpen });
   }
 
   render() {
@@ -52,13 +51,13 @@ class SubmitModal extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-    )
+    );
   }
 }
 
 SubmitModal.propTypes = {
   isOpen: PropTypes.bool,
-  fn: PropTypes.func,
+  fn: PropTypes.func
 };
 
 export default withStyles(styles)(SubmitModal);

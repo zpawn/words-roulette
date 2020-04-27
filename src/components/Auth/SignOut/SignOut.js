@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
 class SignOut extends PureComponent {
   componentDidMount() {
     const { onSignOut, history } = this.props;
-    onSignOut().then(() => history.push('/'));
+    onSignOut().then(() => history.push("/"));
   }
 
   render() {
@@ -27,7 +27,4 @@ SignOut.propTypes = {
   onSignOut: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignOut);
+export default connect(null, mapDispatchToProps)(SignOut);

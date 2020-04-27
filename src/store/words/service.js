@@ -9,7 +9,9 @@ class WordsService {
    */
   static async findAll() {
     try {
-      return DB.ref("/words").once('value').then(snapshot => snapshot.val());
+      return DB.ref("/words")
+        .once("value")
+        .then(snapshot => snapshot.val());
     } catch (e) {
       throw new Error("Fetched words fail");
     }
@@ -21,9 +23,11 @@ class WordsService {
    */
   static async find(id) {
     try {
-      return DB.ref(`/words/${id}`).once("value").then(snapshot => snapshot.val())
+      return DB.ref(`/words/${id}`)
+        .once("value")
+        .then(snapshot => snapshot.val());
     } catch (e) {
-      throw new Error("Fetching word fail")
+      throw new Error("Fetching word fail");
     }
   }
 
@@ -37,9 +41,9 @@ class WordsService {
       const result = await this.find(id);
 
       if (!result) {
-        return this.update(id, word)
+        return this.update(id, word);
       } else {
-        throw new Error("This word already exist")
+        throw new Error("This word already exist");
       }
     } catch (e) {
       throw new Error("Could not create translation/word");
@@ -57,7 +61,7 @@ class WordsService {
     }
 
     try {
-      return DB.ref('words/' + id).set(word);
+      return DB.ref("words/" + id).set(word);
     } catch (e) {
       throw new Error(e.message || "There are Word update failure");
     }
@@ -69,7 +73,7 @@ class WordsService {
    */
   static async remove(id) {
     try {
-      return DB.ref('words/' + id).remove();
+      return DB.ref("words/" + id).remove();
     } catch (e) {
       throw new Error(e.message || "There are Word remove failure");
     }

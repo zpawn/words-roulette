@@ -6,7 +6,7 @@ export const mergeNewTranslations = (word, newTranslation) => {
   const translation = newTranslation.trim();
 
   if (!translation.length) {
-    return newWord
+    return newWord;
   }
 
   newWord.translations = !isArray(newWord.translations)
@@ -14,5 +14,5 @@ export const mergeNewTranslations = (word, newTranslation) => {
     : newWord.translations;
   newWord.translations.push(translation);
 
-  return newWord
+  return newWord;
 };

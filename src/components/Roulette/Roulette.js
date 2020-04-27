@@ -39,10 +39,7 @@ const roulette = compose(
     classes: PropTypes.object
   }),
 
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  ),
+  connect(mapStateToProps, mapDispatchToProps),
 
   withPropsOnChange(
     ["isSuccessWords"],

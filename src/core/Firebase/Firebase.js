@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import "firebase/database"
+import "firebase/database";
 
 ////
 

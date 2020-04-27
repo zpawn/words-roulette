@@ -28,7 +28,7 @@ const translations = ({ translations, onChange, onRemove }) => (
 translations.propTypes = {
   translations: PropTypes.array,
   onChange: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
+  onRemove: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(translations);

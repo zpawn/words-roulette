@@ -19,14 +19,14 @@ import { styles } from "./index";
 class DottedMenu extends PureComponent {
   state = {
     anchorEl: null,
-    isDialogOpen: false,
+    isDialogOpen: false
   };
 
-  anchorElHandler = (anchorEl) => this.setState({ anchorEl });
+  anchorElHandler = anchorEl => this.setState({ anchorEl });
 
-  isDialogOpenHandler = (isDialogOpen) => this.setState({ isDialogOpen });
+  isDialogOpenHandler = isDialogOpen => this.setState({ isDialogOpen });
 
-  onMenuOpen = (e) => this.anchorElHandler(e.currentTarget);
+  onMenuOpen = e => this.anchorElHandler(e.currentTarget);
 
   onMenuClose = () => this.anchorElHandler(null);
 
@@ -91,7 +91,7 @@ class DottedMenu extends PureComponent {
           </DialogActions>
         </Dialog>
       </>
-    )
+    );
   }
 }
 

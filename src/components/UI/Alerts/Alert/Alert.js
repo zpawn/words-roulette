@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { compose } from 'redux'
+import { compose } from "redux";
 
 import { withStyles } from "@material-ui/core/styles";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
@@ -34,7 +34,7 @@ const alert = ({ id, classes, variant, message, onRemove }) => {
         </IconButton>
       ]}
     />
-  )
+  );
 };
 
 alert.defaultProps = {

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 
-import { getValidScore } from '../../../store/roulette';
+import { getValidScore } from "../../../store/roulette";
 
 ////
 
@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
 ////
 
 const TotalScore = ({ words, steps, count }) => {
-  console.log('>>> TotalScore', words, steps, count);
+  console.log(">>> TotalScore", words, steps, count);
   return (
     <Grid container justify="space-around" alignItems="flex-end">
       <Grid item>
@@ -31,6 +31,6 @@ const TotalScore = ({ words, steps, count }) => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default connect(mapStateToProps)(TotalScore);

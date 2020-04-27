@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { compose } from 'redux';
+import { compose } from "redux";
 import PropTypes from "prop-types";
 import _isEmpty from "lodash/isEmpty";
 
@@ -34,7 +34,7 @@ const alerts = ({ classes, alerts }) => {
         ))}
       </div>
     </Snackbar>
-  )
+  );
 };
 
 alerts.propTypes = {
@@ -42,7 +42,4 @@ alerts.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default compose(
-  withStyles(styles),
-  connect(mapStateToProps),
-)(alerts);
+export default compose(withStyles(styles), connect(mapStateToProps))(alerts);

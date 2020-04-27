@@ -31,7 +31,7 @@ class Navigation extends PureComponent {
           </div>
         </Drawer>
       </AppBar>
-    )
+    );
   }
 }
 

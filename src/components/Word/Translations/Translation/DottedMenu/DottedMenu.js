@@ -24,7 +24,7 @@ const dottedMenu = compose(
     id: PropTypes.number.isRequired,
     onChange: PropTypes.func,
     onRemove: PropTypes.func,
-    translation: PropTypes.string,
+    translation: PropTypes.string
   }),
 
   withStateHandlers(

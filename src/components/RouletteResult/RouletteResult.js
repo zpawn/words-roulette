@@ -14,6 +14,6 @@ const rouletteResult = () => {
       <AgainButton />
     </>
   );
-}
+};
 
 export default rouletteResult;
