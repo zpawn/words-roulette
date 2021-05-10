@@ -9,7 +9,7 @@
     "@material-ui/icons": "^3.0.1",
     "firebase": "^7.6.0",
     "history": "^4.7.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "nanoid": "^2.0.1",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
